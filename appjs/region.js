@@ -26,7 +26,7 @@ success: function(obj,textstatus){
 				if (obj.isSuccess == 1) {
 					alertMsg(obj.msg,'success');
 					//alertMsgGritter('Success',obj.msg,'success')
-					if ($('#btnAddCargoRecord').text() == 'Save'){
+					if ($('#btnAddRegionRecord').text() == 'Save'){
 						clearRegionValues();
 					}
 					getRegion();

@@ -19,7 +19,9 @@
 											</li>
 											<li class=""><a href="#Region" data-toggle="tab">Region</a>
 											</li>
-											<li class=""><a href="#settings1" data-toggle="tab">Profile</a>
+											<li class=""><a href="#State" data-toggle="tab">State</a>
+											</li>
+											<li class=""><a href="#City" data-toggle="tab" onclick="javascript: getListState();">City</a>
 											</li>
 										</ul>
 										<div class="tab-content">
@@ -43,10 +45,26 @@
 													
 												</div>
 											</div>
-											<div class="tab-pane fade" id="settings1">
-												<p>Your eyes can deceive you. Don't trust them. I don't know what you're talking about. I am a member of the Imperial Senate on a diplomatic mission to Alderaan-- I care. So, what do you think of her, Han? Look, I can take you as far as Anchorhead. You can get a transport there to Mos Eisley or wherever you're going.
-													</p><p>
-											</p></div>
+											<div class="tab-pane fade in" id="State">
+												<button class="btn btn-primary btn-sm" id="btnAddState" data-toggle="modal" data-target="#stateModal">New</button>
+												<button class="btn btn-sm" id="refreshState" onclick="getState();">Refresh</button>
+												<button class="btn btn-danger btn-sm" id="btnDelMultiState" onclick="deleteSelectedState();">Delete</button>
+												<br/>
+												<br/>
+												<div class="table-responsive no-border" id="divStateTBL">
+													
+												</div>
+											</div>
+											<div class="tab-pane fade in" id="City">
+												<button class="btn btn-primary btn-sm" id="btnAddCity" data-toggle="modal" data-target="#cityModal">New</button>
+												<button class="btn btn-sm" id="refreshCity" onclick="getCity();">Refresh</button>
+												<button class="btn btn-danger btn-sm" id="btnDelMultiCity" onclick="deleteSelectedCity();">Delete</button>
+												<br/>
+												<br/>
+												<div class="table-responsive no-border" id="divCityTBL">
+													
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -117,14 +135,94 @@
 								</div>
 							</div>
 						</div>
+						<!-- State Modal -->
+					   <div class="modal fade bs-modal-sm" id="stateModal" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clearStateValues();">×</button>
+										<h4 class="modal-title">Add/Edit State</h4>
+									</div>
+									<div class="modal-body">
+										<!--<form role="form" action="includes/functioncall.php" method="post" name="cargo_type">-->
+											<div class="row">
+												<div class="col-md-12">
+													<div class="form-group">
+														<label>State Name</label>
+														<div>
+															<input type="hidden" class="form-control" name="stateID" id="stateID" value="0">
+															<input type="text" class="form-control" name="stateName" id="stateName" placeholder="State Name">
+															<input type="hidden" class="form-control" name="functionname" id="functionname" value="setState">
+														</div>
+														<label>State Code</label>
+														<div>
+															<input type="text" class="form-control" name="stateCode" id="stateCode" placeholder="State Code">
+														</div>
+													</div>
+												</div>												
+											</div>
+										
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearStateValues();">Cancel</button>
+										<button type="submit" class="btn btn-primary btn-lg" id="btnAddStateRecord" onclick="setState();">Save</button>
+										<!--</form>-->
+									</div>
+								</div>
+							</div>
+						</div>
+						 <!-- City Modal -->
+					    <div class="modal fade bs-modal-sm" id="cityModal" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clearCityValues();">×</button>
+										<h4 class="modal-title">Add/Edit City</h4>
+									</div>
+									<div class="modal-body">
+										<!--<form role="form" action="includes/functioncall.php" method="post" name="cargo_type">-->
+											<div class="row">
+												<div class="col-md-12">
+													<div class="form-group">
+														<label>City Name</label>
+														<div>
+															<input type="hidden" class="form-control" name="cityID" id="cityID" value="0">
+															<input type="text" class="form-control" name="cityName" id="cityName" placeholder="City Name">
+															<input type="hidden" class="form-control" name="functionname" id="functionname" value="setCity">
+														</div>
+														<label>City Code</label>
+														<div>
+															<input type="text" class="form-control" name="cityCode" id="cityCode" placeholder="city Code">
+														</div>
+														<label>State</label>
+														<div>
+															<select class="lstState form-control" id="cityStateID">
+																<option value="0">Select State:</option>
+															</select>
+														</div>
+													</div>
+												</div>												
+											</div>
+										
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearCityValues();">Cancel</button>
+										<button type="submit" class="btn btn-primary btn-lg" id="btnAddCityRecord" onclick="setCity();">Save</button>
+										<!--</form>-->
+									</div>
+								</div>
+							</div>
+						</div>
 						
 
 				   </div>
 					<!-- /inner content wrapper -->
 
                 </div>
-				<script src="appjs/cargotype.js?85"></script>
+				<script src="appjs/cargotype.js?86"></script>
 				<script src="appjs/region.js"></script>
+				<script src="appjs/state.js"></script>
+				<script src="appjs/city.js"></script>
 				<script>
 				
 				function checkAll(ele,cls) {

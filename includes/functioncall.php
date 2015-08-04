@@ -49,6 +49,47 @@ include_once 'functions.php';
 		$regionID = $_POST["regionID"];		
 		delRegion($regionID, $mysqli);
 	}
+	
+	/*State*/
+	if ($functionname == 'setState'){
+		$stateID = $_POST["stateID"];
+		$stateName = $_POST["stateName"];
+		$stateCode = $_POST["stateCode"];
+		
+		setState($stateID, $stateName, $stateCode, $mysqli);
+	}
+	if ($functionname == 'getState'){	
+		getState($mysqli);
+	}
+	if ($functionname == 'getStateByID'){
+		$stateID = $_POST["stateID"];		
+		getStateByID($stateID, $mysqli);
+	}
+	if ($functionname == 'delState'){
+		$stateID = $_POST["stateID"];		
+		delState($stateID, $mysqli);
+	}
+	
+	/*City*/
+	if ($functionname == 'setCity'){
+		$cityID = $_POST["cityID"];
+		$cityName = $_POST["cityName"];
+		$cityCode = $_POST["cityCode"];
+		$cityStateID = $_POST["cityStateID"];
+		
+		setCity($cityID, $cityName, $cityCode, $cityStateID, $mysqli);
+	}
+	if ($functionname == 'getCity'){	
+		getCity($mysqli);
+	}
+	if ($functionname == 'getCityByID'){
+		$cityID = $_POST["cityID"];		
+		getCityByID($cityID, $mysqli);
+	}
+	if ($functionname == 'delCity'){
+		$cityID = $_POST["cityID"];		
+		delCity($cityID, $mysqli);
+	}
 
 function setCargoType($cargoTypeID, $cargoTypeName, $mysqli) {
 	
@@ -150,6 +191,8 @@ function delCargoType($cargoTypeID,$mysqli) {
 	$response = array();
 	$user_id = 	$_SESSION['user_id'];
 	
+	$ids = explode(',',$cargoTypeID);
+	
 	
 	if (!$mysqli){
 
@@ -157,13 +200,16 @@ function delCargoType($cargoTypeID,$mysqli) {
 		return json_encode($response);
 		exit();
 	}
-		$result = $mysqli->query("DELETE FROM cargotype WHERE cargoTypeID = $cargoTypeID ");
-		
+	$msg = '';
+	$flag = 0;
+	foreach ($ids as $id) {
+		$result = $mysqli->query("DELETE FROM cargotype WHERE cargoTypeID = $id ");
 		if ($result){
-			$response = array('isSuccess'=>'1', 'msg'=>'Record(s) deleted successfully.');
-		} else {
-			$response = array('isSuccess'=>'0', 'msg'=>'Failed to delete record(s).');
+			$msg .= 'Record(s) deleted successfully.,';
 		}
+	}
+	
+	$response = array('isSuccess'=>'1', 'msg'=>$msg); 
 		
 	echo json_encode($response);
 }
@@ -269,6 +315,227 @@ function delRegion($regionID,$mysqli) {
 	$flag = 0;
 	foreach ($ids as $id) {
 		$result = $mysqli->query("DELETE FROM region WHERE regionID = $id ");
+		if ($result){
+			$msg .= 'Record(s) deleted successfully.,';
+		}
+	}
+		$response = array('isSuccess'=>'1', 'msg'=>$msg); 
+		
+	echo json_encode($response);
+}
+
+/* State */
+
+function setState($stateID, $stateName, $stateCode, $mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	
+	if ($stateID == 0) {
+		if ($stmt = $mysqli->prepare("INSERT INTO State (stateName, stateCode, createdByID, modifiedBy) VALUES(?, ?, ?, ?)")) {
+        $stmt->bind_param('ssii',$stateName, $stateCode, $user_id, $user_id);
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record inserted successfully.');
+			}
+		}	
+	} else {
+		if ($stmt = $mysqli->prepare("UPDATE State SET stateName = ?, stateCode = ?, modifiedBy = ? WHERE stateID = ?")) {
+        $stmt->bind_param('ssii',$stateName, $stateCode, $user_id, $stateID);
+ 
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record updated successfully.');
+			}
+		}	
+		
+	}
+    //echo($response);
+	echo json_encode($response);
+}
+
+function getState($mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT stateID, stateName, stateCode FROM state");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+
+	echo json_encode($rows);
+}
+
+function getStateByID($stateID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT stateID, stateName, stateCode FROM state WHERE stateID = $stateID ");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+	
+    
+	echo json_encode($rows);
+}
+
+function delState($stateID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	$ids = explode(',',$stateID);
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	$msg = '';
+	$flag = 0;
+	foreach ($ids as $id) {
+		$result = $mysqli->query("DELETE FROM state WHERE stateID = $id ");
+		if ($result){
+			$msg .= 'Record(s) deleted successfully.,';
+		}
+	}
+		$response = array('isSuccess'=>'1', 'msg'=>$msg); 
+		
+	echo json_encode($response);
+}
+
+/* City */
+
+function setCity($cityID, $cityName, $cityCode, $cityStateID, $mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	
+	if ($cityID == 0) {
+		if ($stmt = $mysqli->prepare("INSERT INTO City (cityName, cityCode, stateID, createdByID, modifiedBy) VALUES(?, ?, ?, ?, ?)")) {
+        $stmt->bind_param('ssii',$cityName, $cityCode, $cityStateID, $user_id, $user_id);
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record inserted successfully.');
+			}
+		}	
+	} else {
+		if ($stmt = $mysqli->prepare("UPDATE City SET cityName = ?, cityCode = ?, stateID = ?, modifiedBy = ? WHERE cityID = ?")) {
+        $stmt->bind_param('ssii',$cityName, $cityCode, $cityStateID, $user_id, $cityID);
+ 
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record updated successfully.');
+			}
+		}	
+		
+	}
+    //echo($response);
+	echo json_encode($response);
+}
+
+function getCity($mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT T0.cityID, T0.cityName, T0.cityCode, T0.stateID, T1.stateName FROM city T0 INNER JOIN state T1 ON T0.stateID = T1.stateID");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+
+	echo json_encode($rows);
+}
+
+function getCityByID($cityID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT T0.cityID, T0.cityName, T0.cityCode, T0.stateID, T1.stateName FROM city T0 
+									INNER JOIN state T1 ON T0.stateID = T1.stateID WHERE cityID = $cityID ");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+	
+    
+	echo json_encode($rows);
+}
+
+function delCity($cityID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	$ids = explode(',',$cityID);
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	$msg = '';
+	$flag = 0;
+	foreach ($ids as $id) {
+		$result = $mysqli->query("DELETE FROM city WHERE cityID = $id ");
 		if ($result){
 			$msg .= 'Record(s) deleted successfully.,';
 		}

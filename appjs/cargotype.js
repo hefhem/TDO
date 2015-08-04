@@ -111,16 +111,17 @@ function deleteSelectedCargoType() {
     if (!confirm('Do you want to delete ' + $('#tbodyCargoType input:checkbox:checked').length + ' record(s)')) return;
 
     var sel_IDs = "";
-    $('.selClsCargoType').each(function () {
-	
-	if (this.checked) { 
-	id = $(this).val(); 
+	$('.selClsCargoType').each(function () { 
+		if (this.checked) { 
+			sel_IDs += $(this).val() + ","; 
+		} 
+	});
 	
 	$.ajax({
 	type: "POST",
 	url: 'includes/functioncall.php',
 	dataType: 'json',
-	data: {functionname: 'delCargoType', cargoTypeID: id},
+	data: {functionname: 'delCargoType', cargoTypeID: sel_IDs},
 	success: function(obj,textstatus){
 					
 					if (obj.isSuccess == 1) {
@@ -135,12 +136,6 @@ function deleteSelectedCargoType() {
 					}
 				}
 	});
-	
-	} 
-	
-	});
-	
-	
 	
 	return false;
 }
