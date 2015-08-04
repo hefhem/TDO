@@ -451,7 +451,7 @@ function setCity($cityID, $cityName, $cityCode, $cityStateID, $mysqli) {
 	
 	if ($cityID == 0) {
 		if ($stmt = $mysqli->prepare("INSERT INTO City (cityName, cityCode, stateID, createdByID, modifiedBy) VALUES(?, ?, ?, ?, ?)")) {
-        $stmt->bind_param('ssii',$cityName, $cityCode, $cityStateID, $user_id, $user_id);
+        $stmt->bind_param('ssiii',$cityName, $cityCode, $cityStateID, $user_id, $user_id);
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
 				$response = array('isSuccess'=>'1', 'msg'=>'Record inserted successfully.');
