@@ -27,6 +27,8 @@ if (login_check($mysqli) == false) {
 										<ul class="nav nav-tabs">
 											<li class="active"><a href="#CargoType" data-toggle="tab">Cargo Type</a>
 											</li>
+                                            <li class=""><a href="#TruckType" data-toggle="tab">Truck Type</a>
+											</li>
 											<li class=""><a href="#Region" data-toggle="tab">Region</a>
 											</li>
 											<li class=""><a href="#State" data-toggle="tab">State</a>
@@ -44,6 +46,16 @@ if (login_check($mysqli) == false) {
 												<br/>
 												<br/>
 												<div class="table-responsive no-border" id="divCargoTBL">
+													
+												</div>
+											</div>
+                                            <div class="tab-pane fade in" id="TruckType">
+												<button class="btn btn-primary btn-sm" id="btnAddTruckType" data-toggle="modal" data-target="#truckTypeModal">New</button>
+												<button class="btn btn-sm" id="refreshTruckType" onclick="getTruckType();">Refresh</button>
+												<button class="btn btn-danger btn-sm" id="btnDelMultiTruckType" onclick="deleteSelectedTruckType();">Delete</button>
+												<br/>
+												<br/>
+												<div class="table-responsive no-border" id="divTruckTBL">
 													
 												</div>
 											</div>
@@ -91,6 +103,7 @@ if (login_check($mysqli) == false) {
 									</div>
 								</div>
 						</div>
+                       
 				       <!-- Cargo Type Modal -->
 					   <div class="modal fade bs-modal-sm" id="cargoTypeModal" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog">
@@ -119,6 +132,40 @@ if (login_check($mysqli) == false) {
 										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearCargoValues();">Cancel</button>
 										<!--<button type="submit" class="btn btn-primary btn-lg" oonclick="setCargoTyp();">Submit</button>-->
 										<button type="button" class="btn btn-primary btn-lg" id="btnAddCargoRecord" onclick="setCargoType();">Save</button>
+										<!--</form>-->
+									</div>
+								</div>
+							</div>
+						</div>
+                       
+                       <!-- Truck Type Modal -->
+					   <div class="modal fade bs-modal-sm" id="truckTypeModal" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clearTruckValues();">×</button>
+										<h4 class="modal-title">Add/Edit Truck Type</h4>
+									</div>
+									<div class="modal-body">
+										<!--<form role="form" action="includes/functioncall.php" method="post" name="truck_type">-->
+											<div class="row">
+												<div class="col-md-12">
+													<div class="form-group">
+														<label>Truck Type Name</label>
+														<div>
+															<input type="hidden" class="form-control" name="truckTypeID" id="truckTypeID" value="0">
+															<input type="text" class="form-control" name="truckTypeName" id="truckTypeName" placeholder="Description">
+															<!--<input type="text" class="form-control" name="functionname" id="functionname" placeholder="Description">-->
+														</div>
+													</div>
+												</div>												
+											</div>
+										
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearTruckValues();">Cancel</button>
+										<!--<button type="submit" class="btn btn-primary btn-lg" oonclick="setTruckTyp();">Submit</button>-->
+										<button type="button" class="btn btn-primary btn-lg" id="btnAddTruckRecord" onclick="setTruckType();">Save</button>
 										<!--</form>-->
 									</div>
 								</div>
@@ -157,6 +204,7 @@ if (login_check($mysqli) == false) {
 								</div>
 							</div>
 						</div>
+                       
 						<!-- State Modal -->
 					   <div class="modal fade bs-modal-sm" id="stateModal" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog">
@@ -193,6 +241,7 @@ if (login_check($mysqli) == false) {
 								</div>
 							</div>
 						</div>
+                       
 						 <!-- City Modal -->
 					    <div class="modal fade bs-modal-sm" id="cityModal" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog">
@@ -293,6 +342,7 @@ if (login_check($mysqli) == false) {
 
                 </div>
 				<script src="appjs/cargotype.js?86"></script>
+                <script src="appjs/trucktype.js"></script>
 				<script src="appjs/region.js"></script>
 				<script src="appjs/state.js"></script>
 				<script src="appjs/city.js"></script>
