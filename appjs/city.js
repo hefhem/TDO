@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	$('#btnDelMultiCity').fadeOut();
 	getCity();
-	getListState();
+	//getListState();
 });
 
 function setCity(){
@@ -23,7 +23,7 @@ if (cityCode == '') {
 	$('#cityCode').focus();
 	return;
 }
-if (cityStateID == '0') {
+if (cityStateID == '0' || cityStateID == '') {
 	alertMsg('Please select a state', 'warning');
 	$('#cityStateID').focus();
 	return;
@@ -72,6 +72,7 @@ function getCity() {
 		var tbl = '<table class="table table-bordered datatable" id="tblCity"> <thead> ' +
 		'<tr> <th style="width: 25px;"><input type="checkbox" value="" id="chkAllCityType" onchange="checkAll(this,\'selClsCity\'); countCityCheckedBox();" /></th> ' +
 		' <th><strong>City Name</strong></th><th><strong>City Code</strong></th><th><strong>State</strong></th><th><strong>Edit</strong></th> </tr>  </thead>  <tbody id="tbodyCity"> ';
+		$('#divCityTBL').html('');
         $('#divCityTBL').html(IMG_LOAD);
 
         $.each(obj, function () {
@@ -96,12 +97,12 @@ function editCity(id) {
 	dataType: 'json',
 	data: {functionname: 'getCityByID', cityID: cityID},
 	success: function(obj,textstatus){
-				console.log(obj);
+				//console.log(obj);
 		$.each(obj, function () {
 			$('#cityID').val(this.cityID);
 			$('#cityName').val(this.cityName);
 			$('#cityCode').val(this.cityCode);
-			$('#cityStateID').val(this.cityStateID);
+			$('#cityStateID').val(this.stateID);
 		});
 		
 		$('#btnAddCityRecord').text('Update');

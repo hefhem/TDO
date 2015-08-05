@@ -187,4 +187,25 @@ function esc_url($url) {
         return $url;
     }
 }
+
+function getStateDropDown($mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+		$result = $mysqli->query("SELECT stateID, stateName, stateCode FROM state");
+		//$response = mysqli_fetch_assoc($result);
+
+	return $result;
+}
+function getRegionDropDown($mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+		$result = $mysqli->query("CALL getRegion");
+
+	return $result;
+}
 ?>

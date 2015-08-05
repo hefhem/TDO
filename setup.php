@@ -1,3 +1,13 @@
+<?php
+include_once 'includes/db_connect.php';
+include_once 'includes/functions.php';
+ 
+sec_session_start();
+ 
+if (login_check($mysqli) == false) {
+    header('Location: signin.php');
+} 
+?>
 
 				
 				<div class="content-wrap">
@@ -21,7 +31,9 @@
 											</li>
 											<li class=""><a href="#State" data-toggle="tab">State</a>
 											</li>
-											<li class=""><a href="#City" data-toggle="tab" onclick="javascript: getListState();">City</a>
+											<li class=""><a href="#City" data-toggle="tab" >City</a>
+											</li>
+											<li class=""><a href="#Location" data-toggle="tab">Location</a>
 											</li>
 										</ul>
 										<div class="tab-content">
@@ -62,6 +74,16 @@
 												<br/>
 												<br/>
 												<div class="table-responsive no-border" id="divCityTBL">
+													
+												</div>
+											</div>
+											<div class="tab-pane fade in" id="Location">
+												<button class="btn btn-primary btn-sm" id="btnAddLocation" data-toggle="modal" data-target="#locationModal">New</button>
+												<button class="btn btn-sm" id="refreshLocation" onclick="getLocation();">Refresh</button>
+												<button class="btn btn-danger btn-sm" id="btnDelMultiLocation" onclick="deleteSelectedLocation();">Delete</button>
+												<br/>
+												<br/>
+												<div class="table-responsive no-border" id="divLocationTBL">
 													
 												</div>
 											</div>
@@ -196,9 +218,15 @@
 														</div>
 														<label>State</label>
 														<div>
-															<select class="lstState form-control" id="cityStateID">
-																<option value="0">Select State:</option>
-															</select>
+														<?php 
+															$state = getStateDropDown($mysqli); 
+															echo '<select class="lstState form-control" id="cityStateID" name="cityStateID">';
+															echo '<option value="0">Select State</option>';
+																while ($staterow = mysqli_fetch_assoc($state)) {
+																   echo '<option value="'.$staterow['stateID'].'">'.$staterow[stateName].'</option>';
+																}
+															echo '</select>';
+														?>
 														</div>
 													</div>
 												</div>												
@@ -214,6 +242,51 @@
 							</div>
 						</div>
 						
+						  <!-- Location Modal -->
+					    <div class="modal fade bs-modal-sm" id="locationModal" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clearLocationValues();">×</button>
+										<h4 class="modal-title">Add/Edit Location</h4>
+									</div>
+									<div class="modal-body">
+										<!--<form role="form" action="includes/functioncall.php" method="post" name="cargo_type">-->
+											<div class="row">
+												<div class="col-md-12">
+													<div class="form-group">
+														<label>Location Name</label>
+														<div>
+															<input type="hidden" class="form-control" name="locationID" id="locationID" value="0">
+															<input type="text" class="form-control" name="locationName" id="locationName" placeholder="location Name">
+															<input type="hidden" class="form-control" name="functionname" id="functionname" value="setLocation">
+														</div>
+														<label>Region</label>
+														<div>
+														<?php 
+															$region = getRegionDropDown($mysqli); 
+															echo '<select class="lstRegion form-control" id="locationRegionID" name="locationRegionID">';
+															echo '<option value="0">Select Region</option>';
+																while ($regionrow = mysqli_fetch_assoc($region)) {
+																   echo '<option value="'.$regionrow['regionID'].'">'.$regionrow['regionName'].'</option>';
+																}
+															echo '</select>';
+														?>
+														</div>
+													</div>
+												</div>												
+											</div>
+										
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearLocationValues();">Cancel</button>
+										<button type="submit" class="btn btn-primary btn-lg" id="btnAddLocationRecord" onclick="setLocation();">Save</button>
+										<!--</form>-->
+									</div>
+								</div>
+							</div>
+						</div>
+						
 
 				   </div>
 					<!-- /inner content wrapper -->
@@ -223,6 +296,7 @@
 				<script src="appjs/region.js"></script>
 				<script src="appjs/state.js"></script>
 				<script src="appjs/city.js"></script>
+				<script src="appjs/location.js"></script>
 				<script>
 				
 				function checkAll(ele,cls) {

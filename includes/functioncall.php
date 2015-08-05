@@ -90,6 +90,26 @@ include_once 'functions.php';
 		$cityID = $_POST["cityID"];		
 		delCity($cityID, $mysqli);
 	}
+	
+	/*Location*/
+	if ($functionname == 'setLocation'){
+		$locationID = $_POST["locationID"];
+		$locationName = $_POST["locationName"];
+		$locationRegionID = $_POST["locationRegionID"];
+		
+		setLocation($locationID, $locationName, $locationRegionID, $mysqli);
+	}
+	if ($functionname == 'getLocation'){	
+		getLocation($mysqli);
+	}
+	if ($functionname == 'getLocationByID'){
+		$locationID = $_POST["locationID"];		
+		getLocationByID($locationID, $mysqli);
+	}
+	if ($functionname == 'delLocation'){
+		$locationID = $_POST["locationID"];		
+		delLocation($locationID, $mysqli);
+	}
 
 function setCargoType($cargoTypeID, $cargoTypeName, $mysqli) {
 	
@@ -459,7 +479,7 @@ function setCity($cityID, $cityName, $cityCode, $cityStateID, $mysqli) {
 		}	
 	} else {
 		if ($stmt = $mysqli->prepare("UPDATE City SET cityName = ?, cityCode = ?, stateID = ?, modifiedBy = ? WHERE cityID = ?")) {
-        $stmt->bind_param('ssii',$cityName, $cityCode, $cityStateID, $user_id, $cityID);
+        $stmt->bind_param('ssiii',$cityName, $cityCode, $cityStateID, $user_id, $cityID);
  
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
@@ -536,6 +556,118 @@ function delCity($cityID,$mysqli) {
 	$flag = 0;
 	foreach ($ids as $id) {
 		$result = $mysqli->query("DELETE FROM city WHERE cityID = $id ");
+		if ($result){
+			$msg .= 'Record(s) deleted successfully.,';
+		}
+	}
+		$response = array('isSuccess'=>'1', 'msg'=>$msg); 
+		
+	echo json_encode($response);
+}
+
+/* Location */
+
+function setLocation($locationID, $locationName, $locationRegionID, $mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	
+	if ($locationID == 0) {
+		if ($stmt = $mysqli->prepare("INSERT INTO Location (locationName, regionID, createdByID, modifiedBy) VALUES(?, ?, ?, ?)")) {
+        $stmt->bind_param('siii',$locationName, $locationRegionID, $user_id, $user_id);
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record inserted successfully.');
+			}
+		}	
+	} else {
+		if ($stmt = $mysqli->prepare("UPDATE Location SET locationName = ?, regionID = ?, modifiedBy = ? WHERE locationID = ?")) {
+        $stmt->bind_param('siii',$locationName, $locationRegionID, $user_id, $locationID);
+ 
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record updated successfully.');
+			}
+		}	
+		
+	}
+    //echo($response);
+	echo json_encode($response);
+}
+
+function getLocation($mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT T0.locationID, T0.locationName, T0.regionID, T1.regionName FROM location T0 INNER JOIN region T1 ON T0.regionID = T1.regionID");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+
+	echo json_encode($rows);
+}
+
+function getLocationByID($locationID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT T0.locationID, T0.locationName, T0.regionID, T1.regionName 
+									FROM location T0 INNER JOIN region T1 ON T0.regionID = T1.regionID 
+									WHERE locationID = $locationID ");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+	
+    
+	echo json_encode($rows);
+}
+
+function delLocation($locationID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	$ids = explode(',',$locationID);
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	$msg = '';
+	$flag = 0;
+	foreach ($ids as $id) {
+		$result = $mysqli->query("DELETE FROM location WHERE locationID = $id ");
 		if ($result){
 			$msg .= 'Record(s) deleted successfully.,';
 		}
