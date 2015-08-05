@@ -170,6 +170,27 @@ include_once 'functions.php';
 		$terminalID = $_POST["terminalID"];		
 		delTerminal($terminalID, $mysqli);
 	}
+	
+	/*Truck*/
+	if ($functionname == 'setTruck'){
+		$truckID = $_POST["truckID"];
+		$truckName = $_POST["truckName"];
+		$regNumb = $_POST["regNumb"];
+		$truckTruckTypeID = $_POST["truckTruckTypeID"];
+		
+		setTruck($truckID, $truckName, $regNumb, $truckTruckTypeID, $mysqli);
+	}
+	if ($functionname == 'getTruck'){	
+		getTruck($mysqli);
+	}
+	if ($functionname == 'getTruckByID'){
+		$truckID = $_POST["truckID"];		
+		getTruckByID($truckID, $mysqli);
+	}
+	if ($functionname == 'delTruck'){
+		$truckID = $_POST["truckID"];		
+		delTruck($truckID, $mysqli);
+	}
 
 function setCargoType($cargoTypeID, $cargoTypeName, $mysqli) {
 	
@@ -1077,6 +1098,118 @@ function delTerminal($terminalID,$mysqli) {
 	$flag = 0;
 	foreach ($ids as $id) {
 		$result = $mysqli->query("DELETE FROM terminal WHERE terminalID = $id ");
+		if ($result){
+			$msg .= 'Record(s) deleted successfully.,';
+		}
+	}
+		$response = array('isSuccess'=>'1', 'msg'=>$msg); 
+		
+	echo json_encode($response);
+}
+
+/* Truck */
+
+function setTruck($truckID, $truckName, $regNumb, $truckTruckTypeID, $mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	
+	if ($truckID == 0) {
+		if ($stmt = $mysqli->prepare("INSERT INTO Truck (truckName, regNumb, truckTypeID, createdByID, modifiedBy) VALUES(?, ?, ?, ?, ?)")) {
+        $stmt->bind_param('ssiii',$truckName, $regNumb, $truckTruckTypeID, $user_id, $user_id);
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record inserted successfully.');
+			}
+		}	
+	} else {
+		if ($stmt = $mysqli->prepare("UPDATE Truck SET truckName = ?, regNumb = ?, truckTypeID = ?, modifiedBy = ? WHERE truckID = ?")) {
+        $stmt->bind_param('ssiii',$truckName, $regNumb, $truckTruckTypeID, $user_id, $truckID);
+ 
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record updated successfully.');
+			}
+		}	
+		
+	}
+    //echo($response);
+	echo json_encode($response);
+}
+
+function getTruck($mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT T0.truckID, T0.truckName, T0.regNumb, T0.truckTypeID, T1.truckTypeName FROM truck T0 INNER JOIN truckType T1 ON T0.truckTypeID = T1.truckTypeID");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+
+	echo json_encode($rows);
+}
+
+function getTruckByID($truckID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT T0.truckID, T0.truckName, T0.regNumb, T0.truckTypeID, T1.truckTypeName 
+									FROM truck T0 INNER JOIN truckType T1 ON T0.truckTypeID = T1.truckTypeID 
+									WHERE truckID = $truckID ");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+	
+    
+	echo json_encode($rows);
+}
+
+function delTruck($truckID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	$ids = explode(',',$truckID);
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	$msg = '';
+	$flag = 0;
+	foreach ($ids as $id) {
+		$result = $mysqli->query("DELETE FROM truck WHERE truckID = $id ");
 		if ($result){
 			$msg .= 'Record(s) deleted successfully.,';
 		}

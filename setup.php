@@ -43,6 +43,8 @@ if (login_check($mysqli) == false) {
 											</li>
 											<li class=""><a href="#Terminal" data-toggle="tab">Terminal</a>
 											</li>
+											<li class=""><a href="#Truck" data-toggle="tab">Truck</a>
+											</li>
 										</ul>
 										<div class="tab-content">
 											<div class="tab-pane fade active in" id="CargoType">
@@ -132,6 +134,16 @@ if (login_check($mysqli) == false) {
 												<br/>
 												<br/>
 												<div class="table-responsive no-border" id="divTerminalTBL">
+													
+												</div>
+											</div>
+											<div class="tab-pane fade in" id="Truck">
+												<button class="btn btn-primary btn-sm" id="btnAddTruck" data-toggle="modal" data-target="#truckModal">New</button>
+												<button class="btn btn-sm" id="refreshTruck" onclick="getTruck();">Refresh</button>
+												<button class="btn btn-danger btn-sm" id="btnDelMultiTruck" onclick="deleteSelectedTruck();">Delete</button>
+												<br/>
+												<br/>
+												<div class="table-responsive no-border" id="divTruckTBL">
 													
 												</div>
 											</div>
@@ -508,6 +520,57 @@ if (login_check($mysqli) == false) {
 								</div>
 							</div>
 						</div>
+						   <!-- Truck Modal -->
+					    <div class="modal fade bs-modal-sm" id="truckModal" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clearTruckValues();">×</button>
+										<h4 class="modal-title">Add/Edit Truck</h4>
+									</div>
+									<div class="modal-body">
+										<!--<form role="form" action="includes/functioncall.php" method="post" name="cargo_type">-->
+											<div class="row">
+												<div class="col-md-12">
+													<div class="form-group">
+														<label>Truck Name</label>
+														<div>
+															<input type="hidden" class="form-control" name="truckID" id="truckID" value="0">
+															<input type="text" class="form-control" name="truckName" id="truckName" placeholder="Truck Name">
+															<input type="hidden" class="form-control" name="functionname" id="functionname" value="setTruck">
+														</div>
+														<label>Registration Number</label>
+														<div>
+															<input type="text" class="form-control" name="regNumb" id="regNumb" placeholder="Registration Number">
+														</div>
+														<label>Truck Type</label>
+														<div>
+														<?php
+															$result->close();
+															$result = getTruckTypeDropDown();
+														
+															echo '<select class="form-control" id="truckTruckTypeID" name="truckTruckTypeID">';
+															echo '<option value="0">Select Truck Type</option>';
+																while ($trucktyperow = mysqli_fetch_assoc($result)) {
+																   echo '<option value="'.$trucktyperow['truckTypeID'].'">'.$trucktyperow['truckTypeName'].'</option>';
+																}
+																$mysqli->close();
+															echo '</select>'; 
+														?>
+														</div>
+													</div>
+												</div>												
+											</div>
+										
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearTruckValues();">Cancel</button>
+										<button type="submit" class="btn btn-primary btn-lg" id="btnAddTruckRecord" onclick="setTruck();">Save</button>
+										<!--</form>-->
+									</div>
+								</div>
+							</div>
+						</div>
 						
 
 				   </div>
@@ -523,6 +586,7 @@ if (login_check($mysqli) == false) {
 				<script src="appjs/location.js"></script>
 				<script src="appjs/port.js"></script>
 				<script src="appjs/terminal.js"></script>
+				<script src="appjs/truck.js"></script>
 				<script>
 				
 				function checkAll(ele,cls) {

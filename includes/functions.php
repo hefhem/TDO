@@ -228,4 +228,13 @@ function getPortDropDown() {
 
 	return $result;
 }
+function getTruckTypeDropDown() {
+	$mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
+	$response = array();
+
+		$result = $mysqli->query("SELECT truckTypeID, truckTypeName FROM trucktype");
+		//$response = mysqli_fetch_assoc($result);
+
+	return $result;
+}
 ?>
