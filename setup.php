@@ -29,6 +29,8 @@ if (login_check($mysqli) == false) {
 											</li>
                                             <li class=""><a href="#TruckType" data-toggle="tab">Truck Type</a>
 											</li>
+                                            <li class=""><a href="#Driver" data-toggle="tab">Driver</a>
+											</li>
 											<li class=""><a href="#Region" data-toggle="tab">Region</a>
 											</li>
 											<li class=""><a href="#State" data-toggle="tab">State</a>
@@ -183,7 +185,7 @@ if (login_check($mysqli) == false) {
 						</div>
                        
                        <!-- Driver Modal -->
-					   <div class="modal fade bs-modal-sm" id="DriverModal" tabindex="-1" role="dialog" aria-hidden="true">
+					   <div class="modal fade bs-modal-sm" id="driverModal" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
