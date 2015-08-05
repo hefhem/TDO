@@ -30,6 +30,26 @@ include_once 'functions.php';
 		$cargoTypeID = $_POST["cargoTypeID"];		
 		delCargoType($cargoTypeID, $mysqli);
 	}
+
+	
+	/*Trucktype*/
+	if ($functionname == 'setTruckType'){
+		$truckTypeID = $_POST["truckTypeID"];
+		$truckTypeName = $_POST["truckTypeName"];
+		
+		setTruckType($truckTypeID, $truckTypeName, $mysqli);
+	}
+	if ($functionname == 'getTruckType'){	
+		getTruckType($mysqli);
+	}
+	if ($functionname == 'getTruckTypeByID'){
+		$truckTypeID = $_POST["truckTypeID"];		
+		getTruckTypeByID($truckTypeID, $mysqli);
+	}
+	if ($functionname == 'delTruckType'){
+		$truckTypeID = $_POST["truckTypeID"];		
+		delTruckType($truckTypeID, $mysqli);
+	}
 	
 	/*Region*/
 	if ($functionname == 'setRegion'){
@@ -224,6 +244,131 @@ function delCargoType($cargoTypeID,$mysqli) {
 	$flag = 0;
 	foreach ($ids as $id) {
 		$result = $mysqli->query("DELETE FROM cargotype WHERE cargoTypeID = $id ");
+		if ($result){
+			$msg .= 'Record(s) deleted successfully.,';
+		}
+	}
+	
+	$response = array('isSuccess'=>'1', 'msg'=>$msg); 
+		
+	echo json_encode($response);
+}
+
+/* Truck Type*/
+
+function setTruckType($truckTypeID, $truckTypeName, $mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	$response = 1;
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+
+	if ($truckTypeID == 0) {
+		if ($stmt = $mysqli->prepare("INSERT INTO TruckType (truckTypeName, createdByID, modifiedBy) VALUES(?, ?, ?)")) {
+        $stmt->bind_param('sss',$truckTypeName, $user_id, $user_id);
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record inserted successfully.');
+			}
+		}	
+	} else {
+		if ($stmt = $mysqli->prepare("UPDATE TruckType SET truckTypeName = ?, modifiedBy = ? WHERE truckTypeID = ?")) {
+        $stmt->bind_param('sii',$truckTypeName, $user_id, $truckTypeID);
+ 
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record updated successfully.');
+			}
+		}	
+		
+	}
+    //echo($response);
+	echo json_encode($response);
+}
+
+function getTruckType($mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("CALL getTruckType");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+	/*if ($stmt = $mysqli->prepare("SELECT truckTypeID, truckTypeName, dateCreated, createdByID, dateModified, modifiedBy FROM trucktype")) {
+        // Execute the prepared query. 
+        $stmt->execute();
+        $stmt->store_result();
+		//$result = $stmt->fetch_all();
+	
+	}*/
+    //echo($response);
+	echo json_encode($rows);
+}
+
+function getTruckTypeByID($truckTypeID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT truckTypeID, truckTypeName FROM trucktype WHERE truckTypeID = $truckTypeID ");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+	/*if ($stmt = $mysqli->prepare("SELECT truckTypeID, truckTypeName, dateCreated, createdByID, dateModified, modifiedBy FROM trucktype")) {
+        // Execute the prepared query. 
+        $stmt->execute();
+        $stmt->store_result();
+		//$result = $stmt->fetch_all();
+	
+	}*/
+    //echo($response);
+	echo json_encode($rows);
+}
+
+function delTruckType($truckTypeID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	$ids = explode(',',$truckTypeID);
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	$msg = '';
+	$flag = 0;
+	foreach ($ids as $id) {
+		$result = $mysqli->query("DELETE FROM trucktype WHERE truckTypeID = $id ");
 		if ($result){
 			$msg .= 'Record(s) deleted successfully.,';
 		}
