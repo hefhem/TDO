@@ -130,6 +130,26 @@ include_once 'functions.php';
 		$locationID = $_POST["locationID"];		
 		delLocation($locationID, $mysqli);
 	}
+	
+	/*Port*/
+	if ($functionname == 'setPort'){
+		$portID = $_POST["portID"];
+		$portName = $_POST["portName"];
+		$portLocationID = $_POST["portLocationID"];
+		
+		setPort($portID, $portName, $portLocationID, $mysqli);
+	}
+	if ($functionname == 'getPort'){	
+		getPort($mysqli);
+	}
+	if ($functionname == 'getPortByID'){
+		$portID = $_POST["portID"];		
+		getPortByID($portID, $mysqli);
+	}
+	if ($functionname == 'delPort'){
+		$portID = $_POST["portID"];		
+		delPort($portID, $mysqli);
+	}
 
 function setCargoType($cargoTypeID, $cargoTypeName, $mysqli) {
 	
@@ -813,6 +833,118 @@ function delLocation($locationID,$mysqli) {
 	$flag = 0;
 	foreach ($ids as $id) {
 		$result = $mysqli->query("DELETE FROM location WHERE locationID = $id ");
+		if ($result){
+			$msg .= 'Record(s) deleted successfully.,';
+		}
+	}
+		$response = array('isSuccess'=>'1', 'msg'=>$msg); 
+		
+	echo json_encode($response);
+}
+
+/* Port */
+
+function setPort($portID, $portName, $portLocationID, $mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	
+	if ($portID == 0) {
+		if ($stmt = $mysqli->prepare("INSERT INTO Port (portName, locationID, createdByID, modifiedBy) VALUES(?, ?, ?, ?)")) {
+        $stmt->bind_param('siii',$portName, $portLocationID, $user_id, $user_id);
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record inserted successfully.');
+			}
+		}	
+	} else {
+		if ($stmt = $mysqli->prepare("UPDATE Port SET portName = ?, locationID = ?, modifiedBy = ? WHERE portID = ?")) {
+        $stmt->bind_param('siii',$portName, $portLocationID, $user_id, $portID);
+ 
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record updated successfully.');
+			}
+		}	
+		
+	}
+    //echo($response);
+	echo json_encode($response);
+}
+
+function getPort($mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT T0.portID, T0.portName, T0.locationID, T1.locationName FROM port T0 INNER JOIN location T1 ON T0.locationID = T1.locationID");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+
+	echo json_encode($rows);
+}
+
+function getPortByID($portID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT T0.portID, T0.portName, T0.locationID, T1.locationName 
+									FROM port T0 INNER JOIN location T1 ON T0.locationID = T1.locationID 
+									WHERE portID = $portID ");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+	
+    
+	echo json_encode($rows);
+}
+
+function delPort($portID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	$ids = explode(',',$portID);
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	$msg = '';
+	$flag = 0;
+	foreach ($ids as $id) {
+		$result = $mysqli->query("DELETE FROM port WHERE portID = $id ");
 		if ($result){
 			$msg .= 'Record(s) deleted successfully.,';
 		}

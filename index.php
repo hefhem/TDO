@@ -6,7 +6,7 @@ sec_session_start();
  
 if (login_check($mysqli) == false) {
     header('Location: signin.php');
-} 
+}
 ?>
 
 <!doctype html>

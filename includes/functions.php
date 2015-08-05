@@ -7,6 +7,11 @@ function sec_session_start() {
     // This stops JavaScript being able to access the session id.
     $httponly = true;
     // Forces sessions to only use cookies.
+	/*session_save_path('C:\wamp\www\TDO\includes');
+	ini_set('session.gc_maxlifetime', 3*60*60); // 3 hours
+	ini_set('session.gc_probability', 1);
+	ini_set('session.gc_divisor', 100);
+	ini_set('session.cookie_secure', false);*/
     if (ini_set('session.use_only_cookies', 1) === FALSE) {
         header("Location: ../error.php?err=Could not initiate a safe session (ini_set)");
         exit();
@@ -21,7 +26,7 @@ function sec_session_start() {
     // Sets the session name to the one set above.
     session_name($session_name);
     session_start();            // Start the PHP session 
-    session_regenerate_id(true);    // regenerated the session, delete the old one. 
+    //session_regenerate_id(true);    // regenerated the session, delete the old one. 
 }
 
 function login($email, $password, $mysqli) {
@@ -188,23 +193,29 @@ function esc_url($url) {
     }
 }
 
-function getStateDropDown($mysqli) {
-	
+function getStateDropDown() {
+	$mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
 	$response = array();
-	$user_id = 	$_SESSION['user_id'];
-	
 	
 		$result = $mysqli->query("SELECT stateID, stateName, stateCode FROM state");
 		//$response = mysqli_fetch_assoc($result);
 
 	return $result;
 }
-function getRegionDropDown($mysqli) {
-	
+function getRegionDropDown() {
+	$mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
 	$response = array();
-	$user_id = 	$_SESSION['user_id'];
 	
 		$result = $mysqli->query("CALL getRegion");
+
+	return $result;
+}
+function getLocationDropDown() {
+	$mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
+	$response = array();
+
+		$result = $mysqli->query("SELECT locationID, locationName FROM location");
+		//$response = mysqli_fetch_assoc($result);
 
 	return $result;
 }

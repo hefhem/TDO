@@ -6,7 +6,7 @@ sec_session_start();
  
 if (login_check($mysqli) == false) {
     header('Location: signin.php');
-} 
+}
 ?>
 
 				
@@ -38,6 +38,8 @@ if (login_check($mysqli) == false) {
 											<li class=""><a href="#City" data-toggle="tab" >City</a>
 											</li>
 											<li class=""><a href="#Location" data-toggle="tab">Location</a>
+											</li>
+											<li class=""><a href="#Port" data-toggle="tab">Port</a>
 											</li>
 										</ul>
 										<div class="tab-content">
@@ -108,6 +110,16 @@ if (login_check($mysqli) == false) {
 												<br/>
 												<br/>
 												<div class="table-responsive no-border" id="divLocationTBL">
+													
+												</div>
+											</div>
+											<div class="tab-pane fade in" id="Port">
+												<button class="btn btn-primary btn-sm" id="btnAddPort" data-toggle="modal" data-target="#portModal">New</button>
+												<button class="btn btn-sm" id="refreshPort" onclick="getPort();">Refresh</button>
+												<button class="btn btn-danger btn-sm" id="btnDelMultiPort" onclick="deleteSelectedPort();">Delete</button>
+												<br/>
+												<br/>
+												<div class="table-responsive no-border" id="divPortTBL">
 													
 												</div>
 											</div>
@@ -318,12 +330,15 @@ if (login_check($mysqli) == false) {
 														<label>State</label>
 														<div>
 														<?php 
-															$state = getStateDropDown($mysqli); 
+															$result = getStateDropDown(); 
 															echo '<select class="lstState form-control" id="cityStateID" name="cityStateID">';
 															echo '<option value="0">Select State</option>';
-																while ($staterow = mysqli_fetch_assoc($state)) {
-																   echo '<option value="'.$staterow['stateID'].'">'.$staterow[stateName].'</option>';
+																while ($staterow = mysqli_fetch_assoc($result)) {
+																   echo '<option value="'.$staterow['stateID'].'">'.$staterow['stateName'].'</option>';
 																}
+																
+																$mysqli->close();
+																
 															echo '</select>';
 														?>
 														</div>
@@ -363,12 +378,14 @@ if (login_check($mysqli) == false) {
 														<label>Region</label>
 														<div>
 														<?php 
-															$region = getRegionDropDown($mysqli); 
+															$result->free_result();
+															$result = getRegionDropDown(); 
 															echo '<select class="lstRegion form-control" id="locationRegionID" name="locationRegionID">';
 															echo '<option value="0">Select Region</option>';
-																while ($regionrow = mysqli_fetch_assoc($region)) {
+																while ($regionrow = mysqli_fetch_assoc($result)) {
 																   echo '<option value="'.$regionrow['regionID'].'">'.$regionrow['regionName'].'</option>';
 																}
+																$mysqli->close();
 															echo '</select>';
 														?>
 														</div>
@@ -380,6 +397,53 @@ if (login_check($mysqli) == false) {
 									<div class="modal-footer">
 										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearLocationValues();">Cancel</button>
 										<button type="submit" class="btn btn-primary btn-lg" id="btnAddLocationRecord" onclick="setLocation();">Save</button>
+										<!--</form>-->
+									</div>
+								</div>
+							</div>
+						</div>
+						   <!-- Port Modal -->
+					    <div class="modal fade bs-modal-sm" id="portModal" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clearPortValues();">×</button>
+										<h4 class="modal-title">Add/Edit Port</h4>
+									</div>
+									<div class="modal-body">
+										<!--<form role="form" action="includes/functioncall.php" method="post" name="cargo_type">-->
+											<div class="row">
+												<div class="col-md-12">
+													<div class="form-group">
+														<label>Port Name</label>
+														<div>
+															<input type="hidden" class="form-control" name="portID" id="portID" value="0">
+															<input type="text" class="form-control" name="portName" id="portName" placeholder="Port Name">
+															<input type="hidden" class="form-control" name="functionname" id="functionname" value="setPort">
+														</div>
+														<label>Location</label>
+														<div>
+														<?php
+															$result->close();
+															$result = getLocationDropDown();
+														
+															echo '<select class="form-control" id="portLocationID" name="portLocationID">';
+															echo '<option value="0">Select Location</option>';
+																while ($locationrow = mysqli_fetch_assoc($result)) {
+																   echo '<option value="'.$locationrow['locationID'].'">'.$locationrow['locationName'].'</option>';
+																}
+																$mysqli->close();
+															echo '</select>'; 
+														?>
+														</div>
+													</div>
+												</div>												
+											</div>
+										
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearPortValues();">Cancel</button>
+										<button type="submit" class="btn btn-primary btn-lg" id="btnAddPortRecord" onclick="setPort();">Save</button>
 										<!--</form>-->
 									</div>
 								</div>
@@ -398,6 +462,7 @@ if (login_check($mysqli) == false) {
 				<script src="appjs/state.js"></script>
 				<script src="appjs/city.js"></script>
 				<script src="appjs/location.js"></script>
+				<script src="appjs/port.js"></script>
 				<script>
 				
 				function checkAll(ele,cls) {
