@@ -59,6 +59,16 @@ if (login_check($mysqli) == false) {
 													
 												</div>
 											</div>
+                                            <div class="tab-pane fade in" id="Driver">
+												<button class="btn btn-primary btn-sm" id="btnAddDriver" data-toggle="modal" data-target="#driverModal">New</button>
+												<button class="btn btn-sm" id="refreshDriver" onclick="getDriver();">Refresh</button>
+												<button class="btn btn-danger btn-sm" id="btnDelMultiDriver" onclick="deleteSelectedDriver();">Delete</button>
+												<br/>
+												<br/>
+												<div class="table-responsive no-border" id="divDriverTBL">
+													
+												</div>
+											</div>
 											<div class="tab-pane fade in" id="Region">
 												<button class="btn btn-primary btn-sm" id="btnAddRegion" data-toggle="modal" data-target="#regionModal">New</button>
 												<button class="btn btn-sm" id="refreshRegion" onclick="getRegion();">Refresh</button>
@@ -167,6 +177,44 @@ if (login_check($mysqli) == false) {
 										<!--<button type="submit" class="btn btn-primary btn-lg" oonclick="setTruckTyp();">Submit</button>-->
 										<button type="button" class="btn btn-primary btn-lg" id="btnAddTruckRecord" onclick="setTruckType();">Save</button>
 										<!--</form>-->
+									</div>
+								</div>
+							</div>
+						</div>
+                       
+                       <!-- Driver Modal -->
+					   <div class="modal fade bs-modal-sm" id="DriverModal" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clearDriverValues();">×</button>
+										<h4 class="modal-title">Add/Edit Driver</h4>
+									</div>
+									<div class="modal-body">
+											<div class="row">
+												<div class="col-md-12">
+													<div class="form-group">
+														<label>First Name</label>
+														<div>
+															<input type="hidden" class="form-control" name="driverID" id="driverID" value="0">
+															<input type="text" class="form-control" name="diverFirstName" id="diverFirstName" placeholder="First Name">
+														</div>
+													</div>
+                                                    
+                                                    <div class="form-group">
+														<label>Middle Name</label>
+														<div>
+															<input type="text" class="form-control" name="diverMiddleName" id="diverMiddleName" placeholder="Middle Name">
+														</div>
+													</div>
+                                                    
+												</div>												
+											</div>
+										
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearDriverValues();">Cancel</button>
+										<button type="button" class="btn btn-primary btn-lg" id="btnAddDriverRecord" onclick="setDriver();">Save</button>
 									</div>
 								</div>
 							</div>
@@ -343,6 +391,7 @@ if (login_check($mysqli) == false) {
                 </div>
 				<script src="appjs/cargotype.js?86"></script>
                 <script src="appjs/trucktype.js"></script>
+                <script src="appjs/driver.js"></script>  
 				<script src="appjs/region.js"></script>
 				<script src="appjs/state.js"></script>
 				<script src="appjs/city.js"></script>
