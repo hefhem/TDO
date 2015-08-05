@@ -150,6 +150,26 @@ include_once 'functions.php';
 		$portID = $_POST["portID"];		
 		delPort($portID, $mysqli);
 	}
+	
+	/*Terminal*/
+	if ($functionname == 'setTerminal'){
+		$terminalID = $_POST["terminalID"];
+		$terminalName = $_POST["terminalName"];
+		$terminalPortID = $_POST["terminalPortID"];
+		
+		setTerminal($terminalID, $terminalName, $terminalPortID, $mysqli);
+	}
+	if ($functionname == 'getTerminal'){	
+		getTerminal($mysqli);
+	}
+	if ($functionname == 'getTerminalByID'){
+		$terminalID = $_POST["terminalID"];		
+		getTerminalByID($terminalID, $mysqli);
+	}
+	if ($functionname == 'delTerminal'){
+		$terminalID = $_POST["terminalID"];		
+		delTerminal($terminalID, $mysqli);
+	}
 
 function setCargoType($cargoTypeID, $cargoTypeName, $mysqli) {
 	
@@ -945,6 +965,118 @@ function delPort($portID,$mysqli) {
 	$flag = 0;
 	foreach ($ids as $id) {
 		$result = $mysqli->query("DELETE FROM port WHERE portID = $id ");
+		if ($result){
+			$msg .= 'Record(s) deleted successfully.,';
+		}
+	}
+		$response = array('isSuccess'=>'1', 'msg'=>$msg); 
+		
+	echo json_encode($response);
+}
+
+/* Terminal */
+
+function setTerminal($terminalID, $terminalName, $terminalPortID, $mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	
+	if ($terminalID == 0) {
+		if ($stmt = $mysqli->prepare("INSERT INTO Terminal (terminalName, portID, createdByID, modifiedBy) VALUES(?, ?, ?, ?)")) {
+        $stmt->bind_param('siii',$terminalName, $terminalPortID, $user_id, $user_id);
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record inserted successfully.');
+			}
+		}	
+	} else {
+		if ($stmt = $mysqli->prepare("UPDATE Terminal SET terminalName = ?, portID = ?, modifiedBy = ? WHERE terminalID = ?")) {
+        $stmt->bind_param('siii',$terminalName, $terminalPortID, $user_id, $terminalID);
+ 
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record updated successfully.');
+			}
+		}	
+		
+	}
+    //echo($response);
+	echo json_encode($response);
+}
+
+function getTerminal($mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT T0.terminalID, T0.terminalName, T0.portID, T1.portName FROM terminal T0 INNER JOIN port T1 ON T0.portID = T1.portID");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+
+	echo json_encode($rows);
+}
+
+function getTerminalByID($terminalID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT T0.terminalID, T0.terminalName, T0.portID, T1.portName 
+									FROM terminal T0 INNER JOIN port T1 ON T0.portID = T1.portID 
+									WHERE terminalID = $terminalID ");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+	
+    
+	echo json_encode($rows);
+}
+
+function delTerminal($terminalID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	$ids = explode(',',$terminalID);
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	$msg = '';
+	$flag = 0;
+	foreach ($ids as $id) {
+		$result = $mysqli->query("DELETE FROM terminal WHERE terminalID = $id ");
 		if ($result){
 			$msg .= 'Record(s) deleted successfully.,';
 		}

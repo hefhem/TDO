@@ -41,6 +41,8 @@ if (login_check($mysqli) == false) {
 											</li>
 											<li class=""><a href="#Port" data-toggle="tab">Port</a>
 											</li>
+											<li class=""><a href="#Terminal" data-toggle="tab">Terminal</a>
+											</li>
 										</ul>
 										<div class="tab-content">
 											<div class="tab-pane fade active in" id="CargoType">
@@ -120,6 +122,16 @@ if (login_check($mysqli) == false) {
 												<br/>
 												<br/>
 												<div class="table-responsive no-border" id="divPortTBL">
+													
+												</div>
+											</div>
+											<div class="tab-pane fade in" id="Terminal">
+												<button class="btn btn-primary btn-sm" id="btnAddTerminal" data-toggle="modal" data-target="#terminalModal">New</button>
+												<button class="btn btn-sm" id="refreshTerminal" onclick="getTerminal();">Refresh</button>
+												<button class="btn btn-danger btn-sm" id="btnDelMultiTerminal" onclick="deleteSelectedTerminal();">Delete</button>
+												<br/>
+												<br/>
+												<div class="table-responsive no-border" id="divTerminalTBL">
 													
 												</div>
 											</div>
@@ -449,6 +461,53 @@ if (login_check($mysqli) == false) {
 								</div>
 							</div>
 						</div>
+						    <!-- Terminal Modal -->
+					    <div class="modal fade bs-modal-sm" id="terminalModal" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clearTerminalValues();">×</button>
+										<h4 class="modal-title">Add/Edit Terminal</h4>
+									</div>
+									<div class="modal-body">
+										<!--<form role="form" action="includes/functioncall.php" method="post" name="cargo_type">-->
+											<div class="row">
+												<div class="col-md-12">
+													<div class="form-group">
+														<label>Terminal Name</label>
+														<div>
+															<input type="hidden" class="form-control" name="terminalID" id="terminalID" value="0">
+															<input type="text" class="form-control" name="terminalName" id="terminalName" placeholder="Terminal Name">
+															<input type="hidden" class="form-control" name="functionname" id="functionname" value="setTerminal">
+														</div>
+														<label>Port</label>
+														<div>
+														<?php
+															$result->close();
+															$result = getPortDropDown();
+														
+															echo '<select class="form-control" id="terminalPortID" name="terminalPortID">';
+															echo '<option value="0">Select Port</option>';
+																while ($portrow = mysqli_fetch_assoc($result)) {
+																   echo '<option value="'.$portrow['portID'].'">'.$portrow['portName'].'</option>';
+																}
+																$mysqli->close();
+															echo '</select>'; 
+														?>
+														</div>
+													</div>
+												</div>												
+											</div>
+										
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearTerminalValues();">Cancel</button>
+										<button type="submit" class="btn btn-primary btn-lg" id="btnAddTerminalRecord" onclick="setTerminal();">Save</button>
+										<!--</form>-->
+									</div>
+								</div>
+							</div>
+						</div>
 						
 
 				   </div>
@@ -457,12 +516,13 @@ if (login_check($mysqli) == false) {
                 </div>
 				<script src="appjs/cargotype.js?86"></script>
                 <script src="appjs/trucktype.js"></script>
-                <script src="appjs/driver.js"></script>  
+               
 				<script src="appjs/region.js"></script>
 				<script src="appjs/state.js"></script>
 				<script src="appjs/city.js"></script>
 				<script src="appjs/location.js"></script>
 				<script src="appjs/port.js"></script>
+				<script src="appjs/terminal.js"></script>
 				<script>
 				
 				function checkAll(ele,cls) {

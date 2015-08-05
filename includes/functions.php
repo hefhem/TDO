@@ -219,4 +219,13 @@ function getLocationDropDown() {
 
 	return $result;
 }
+function getPortDropDown() {
+	$mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
+	$response = array();
+
+		$result = $mysqli->query("SELECT portID, portName FROM port");
+		//$response = mysqli_fetch_assoc($result);
+
+	return $result;
+}
 ?>
