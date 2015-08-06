@@ -61,7 +61,7 @@ success: function(obj,textstatus){
 }
 
 function getTruck() {
-	alert('1');
+	//alert('1');
 	$.ajax({
 	type: "POST",
 	url: 'includes/functioncall.php',
@@ -69,24 +69,24 @@ function getTruck() {
 	data: {functionname: 'getTruck'},
 	success: function(obj,textstatus){
 				
-				console.log(obj);
+				//console.log(obj);
 				
 		var tbl = '<table class="table table-bordered datatable" id="tblTruck"> <thead> ' +
 		'<tr> <th style="width: 25px;"><input type="checkbox" value="" id="chkAllTruckType" onchange="checkAll(this,\'selClsTruck\'); countTruckCheckedBox();" /></th> ' +
 		' <th><strong>Truck Name</strong></th><th><strong>Truck Type</strong></th><th><strong>Reg. No.</strong></th><th><strong>Edit</strong></th> </tr>  </thead>  <tbody id="tbodyTruck"> ';
 		$('#divTruckTBL').html('');
         $('#divTruckTBL').html(IMG_LOAD);
-		alert('diff');
+		
         $.each(obj, function () {
             tbl += _addTruck(this.truckID, this.truckName, this.regNumb, this.truckTypeName, true);
-			alert('loop');
+			
         });
 		tbl += '</tbody></table>'; 
 		$("#divTruckTBL").html(tbl); 
 		$('#tblTruck').dataTable();
 	}
 });
-	alert('2');
+	//alert('2');
 	return false;
 }
 

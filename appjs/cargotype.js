@@ -50,7 +50,7 @@ function getCargoType() {
 	data: {functionname: 'getCargoType'},
 	success: function(obj,textstatus){
 				
-				//console.log(obj);
+				console.log(obj);
 		var cls = 'selClsCargoType';
 		var tbl = '<table class="table table-bordered datatable" id="tblCargoType"> <thead> ' +
 		'<tr> <th style="width: 25px;"><input type="checkbox" value="" id="chkAllCargoTypeType" onchange="checkAll(this,\'selClsCargoType\'); countCargoTypeCheckedBox();" /></th> ' +

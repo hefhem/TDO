@@ -254,7 +254,7 @@ if (login_check($mysqli) == false) {
                             </a>
                             <ul class="sub-menu">
                                 <li>
-                                    <a href="javascript:;" onclick="javascript: ld_fm2('form.php');" >
+                                    <a href="javascript:;" onclick="javascript: ld_fm2('settings.php');" >
                                         <span>Settings</span>
                                     </a>
                                 </li>

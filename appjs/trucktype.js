@@ -55,13 +55,13 @@ function getTruckType() {
 		var tbl = '<table class="table table-bordered datatable" id="tblTruckType"> <thead> ' +
 		'<tr> <th style="width: 5%;"><input type="checkbox" value="" id="chkAllTruckTypeType" onchange="checkAll(this,\'selClsTruckType\'); countTruckTypeCheckedBox();" /></th> ' +
 		' <th><strong>Truck Name</strong></th><th style="width: 7%; text-align: center;"><strong>Edit</strong></th> </tr>  </thead>  <tbody id="tbodyTruckType"> ';
-        $('#divTruckTBL').html(IMG_LOAD);
+        $('#divTruckTypeTBL').html(IMG_LOAD);
 
         $.each(obj, function () {
             tbl += _addTruckType(this.truckTypeID, this.truckTypeName,true);
         });
 		tbl += '</tbody></table>'; 
-		$("#divTruckTBL").html(tbl); 
+		$("#divTruckTypeTBL").html(tbl); 
 		$('#tblTruckType').dataTable();
 	}
 });

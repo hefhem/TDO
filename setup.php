@@ -63,7 +63,7 @@ if (login_check($mysqli) == false) {
 												<button class="btn btn-danger btn-sm" id="btnDelMultiTruckType" onclick="deleteSelectedTruckType();">Delete</button>
 												<br/>
 												<br/>
-												<div class="table-responsive no-border" id="divTruckTBL">
+												<div class="table-responsive no-border" id="divTruckTypeTBL">
 													
 												</div>
 											</div>
