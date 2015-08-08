@@ -231,18 +231,33 @@ if (login_check($mysqli) == false) {
 									<div class="modal-body">
 											<div class="row">
 												<div class="col-md-12">
+                                                    
+                                                    <div class="form-group">
+														<label>Driver Code</label>
+														<div>
+															<input type="text" class="form-control" name="driverCode" id="driverCode" placeholder="Driver Code">
+														</div>
+													</div>
+                                                    
 													<div class="form-group">
 														<label>First Name</label>
 														<div>
 															<input type="hidden" class="form-control" name="driverID" id="driverID" value="0">
-															<input type="text" class="form-control" name="diverFirstName" id="diverFirstName" placeholder="First Name">
+															<input type="text" class="form-control" name="driverFirstName" id="driverFirstName" placeholder="First Name">
 														</div>
 													</div>
                                                     
                                                     <div class="form-group">
 														<label>Middle Name</label>
 														<div>
-															<input type="text" class="form-control" name="diverMiddleName" id="diverMiddleName" placeholder="Middle Name">
+															<input type="text" class="form-control" name="driverMiddleName" id="driverMiddleName" placeholder="Middle Name">
+														</div>
+													</div>
+                                                    
+                                                    <div class="form-group">
+														<label>Last Name</label>
+														<div>
+															<input type="text" class="form-control" name="driverLastName" id="driverLastName" placeholder="Last Name">
 														</div>
 													</div>
                                                     
@@ -426,6 +441,7 @@ if (login_check($mysqli) == false) {
 								</div>
 							</div>
 						</div>
+                       
 						   <!-- Port Modal -->
 					    <div class="modal fade bs-modal-sm" id="portModal" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog">
@@ -473,6 +489,7 @@ if (login_check($mysqli) == false) {
 								</div>
 							</div>
 						</div>
+                       
 						    <!-- Terminal Modal -->
 					    <div class="modal fade bs-modal-sm" id="terminalModal" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog">
@@ -520,6 +537,7 @@ if (login_check($mysqli) == false) {
 								</div>
 							</div>
 						</div>
+                       
 						   <!-- Truck Modal -->
 					    <div class="modal fade bs-modal-sm" id="truckModal" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog">
@@ -579,7 +597,7 @@ if (login_check($mysqli) == false) {
                 </div>
 				<script src="appjs/cargotype.js?86"></script>
                 <script src="appjs/trucktype.js"></script>
-               
+                <script src="appjs/driver.js"></script>
 				<script src="appjs/region.js"></script>
 				<script src="appjs/state.js"></script>
 				<script src="appjs/city.js"></script>

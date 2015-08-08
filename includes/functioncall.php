@@ -31,7 +31,6 @@ include_once 'functions.php';
 		delCargoType($cargoTypeID, $mysqli);
 	}
 
-	
 	/*Trucktype*/
 	if ($functionname == 'setTruckType'){
 		$truckTypeID = $_POST["truckTypeID"];
@@ -49,6 +48,29 @@ include_once 'functions.php';
 	if ($functionname == 'delTruckType'){
 		$truckTypeID = $_POST["truckTypeID"];		
 		delTruckType($truckTypeID, $mysqli);
+	}
+
+    /*Driver*/
+	if ($functionname == 'setDriver'){
+        
+        $driverID = $_POST["driverID"];
+        $driverCode = $_POST["driverCode"];
+        $driverFirstName = $_POST["driverFirstName"];
+        $driverMiddleName = $_POST["driverMiddleName"];
+        $driverLastName = $_POST["driverLastName"];
+        
+        setDriver($driverID, $driverCode, $driverFirstName, $driverMiddleName, $driverLastName, $mysqli);
+	}
+	if ($functionname == 'getDriver'){	
+		getDriver($mysqli);
+	}
+	if ($functionname == 'getDriverByID'){
+		$driverID = $_POST["driverID"];		
+		getDriverByID($driverID, $mysqli);
+	}
+	if ($functionname == 'delDriver'){
+		$driverID = $_POST["driverID"];		
+		delDriver($driverID, $mysqli);
 	}
 	
 	/*Region*/
@@ -191,6 +213,29 @@ include_once 'functions.php';
 		$truckID = $_POST["truckID"];		
 		delTruck($truckID, $mysqli);
 	}
+
+    /*User Group*/
+	if ($functionname == 'setUserGroup'){
+		$userGroupID = $_POST["userGroupID"];
+		$userGroupName = $_POST["userGroupName"];
+		$userGroupDescription = $_POST["userGroupDescription"];
+		$userGroupCode = $_POST["userGroupCode"];
+		
+		setUserGroup($userGroupID, $userGroupName, $userGroupDescription, $userGroupCode, $mysqli);
+	}
+	if ($functionname == 'getUserGroup'){	
+		getUserGroup($mysqli);
+	}
+	if ($functionname == 'getUserGroupByID'){
+		$userGroupID = $_POST["userGroupID"];		
+		getUserGroupByID($userGroupID, $mysqli);
+	}
+	if ($functionname == 'delUserGroup'){
+		$userGroupID = $_POST["userGroupID"];		
+		delUserGroup($userGroupID, $mysqli);
+	}
+
+/* Cargo Type*/
 
 function setCargoType($cargoTypeID, $cargoTypeName, $mysqli) {
 	
@@ -366,19 +411,13 @@ function getTruckType($mysqli) {
 		return json_encode($response);
 		exit();
 	}
-		$result = $mysqli->query("CALL getTruckType");
+		$result = $mysqli->query("SELECT truckTypeID, truckTypeName, dateCreated, createdByID, dateModified, modifiedBy FROM trucktype");
 
 		//use mysqli->affected_rows
 		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
 			$rows[] = $result->fetch_assoc();
 		}
-	/*if ($stmt = $mysqli->prepare("SELECT truckTypeID, truckTypeName, dateCreated, createdByID, dateModified, modifiedBy FROM trucktype")) {
-        // Execute the prepared query. 
-        $stmt->execute();
-        $stmt->store_result();
-		//$result = $stmt->fetch_all();
-	
-	}*/
+    
     //echo($response);
 	echo json_encode($rows);
 }
@@ -440,7 +479,119 @@ function delTruckType($truckTypeID,$mysqli) {
 	echo json_encode($response);
 }
 
-/* region */
+/* Driver*/
+
+function setDriver($driverID, $driverCode, $driverFirstName, $driverMiddleName, $driverLastName, $mysqli) {
+	
+    $response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	$response = 1;
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+
+	if ($driverID == 0) {
+		if ($stmt = $mysqli->prepare("INSERT INTO driver (driverCode, firstName, middleName, lastName, createdByID, modifiedBy) VALUES(?, ?, ?, ?, ?, ?)")) {
+        $stmt->bind_param('ssssii',$driverCode, $driverFirstName, $driverMiddleName, $driverLastName, $user_id, $user_id);
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record inserted successfully.');
+			}
+		}	
+	} else {
+		if ($stmt = $mysqli->prepare("UPDATE Driver SET driverCode = ?, firstName = ?, middleName = ?, lastName = ?, modifiedBy = ? WHERE driverID = ?")) {
+        $stmt->bind_param('ssssii',$driverCode, $driverFirstName, $driverMiddleName, $driverLastName, $user_id, $driverID);
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record updated successfully.');
+			}
+		}	
+		
+	}
+    //echo($response);
+	echo json_encode($response);
+}
+
+function getDriver($mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT driverID, driverCode, firstName, middleName, lastName, dateCreated, createdByID, dateModified, modifiedBy FROM driver");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+    
+    //echo($response);
+	echo json_encode($rows);
+}
+
+function getDriverByID($driverID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT driverID, driverCode, firstName, middleName, lastName FROM driver WHERE driverID = $driverID");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+    
+    //echo($response);
+	echo json_encode($rows);
+}
+
+function delDriver($driverID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	$ids = explode(',',$driverID);
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	$msg = '';
+	$flag = 0;
+	foreach ($ids as $id) {
+		$result = $mysqli->query("DELETE FROM driver WHERE driverID = $id ");
+		if ($result){
+			$msg .= 'Record(s) deleted successfully.,';
+		}
+	}
+	
+	$response = array('isSuccess'=>'1', 'msg'=>$msg); 
+		
+	echo json_encode($response);
+}
+
+/* Region */
 
 function setRegion($regionID, $regionName, $mysqli) {
 	
@@ -1210,6 +1361,115 @@ function delTruck($truckID,$mysqli) {
 	$flag = 0;
 	foreach ($ids as $id) {
 		$result = $mysqli->query("DELETE FROM truck WHERE truckID = $id ");
+		if ($result){
+			$msg .= 'Record(s) deleted successfully.,';
+		}
+	}
+		$response = array('isSuccess'=>'1', 'msg'=>$msg); 
+		
+	echo json_encode($response);
+}
+
+/* User Group */
+
+function setUserGroup($userGroupID, $userGroupName, $userGroupDescription, $userGroupCode, $mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	
+	if ($userGroupID == 0) {
+		if ($stmt = $mysqli->prepare("INSERT INTO UserGroups (userGroupName, userGroupDescription, userGroupCode, createdByID, modifiedByID) VALUES(?, ?, ?, ?, ?)")) {
+        $stmt->bind_param('sssii',$userGroupName, $userGroupDescription, $userGroupCode, $user_id, $user_id);
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record inserted successfully.');
+			}
+		}	
+	} else {
+		if ($stmt = $mysqli->prepare("UPDATE UserGroups SET userGroupName = ?, userGroupDescription = ?, userGroupCode = ?, modifiedByID = ? WHERE userGroupID = ?")) {
+        $stmt->bind_param('sssii',$userGroupName, $userGroupDescription, $userGroupCode, $user_id, $userGroupID);
+ 
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record updated successfully.');
+			}
+		}	
+		
+	}
+    //echo($response);
+	echo json_encode($response);
+}
+
+function getUserGroup($mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT userGroupID, userGroupName, userGroupDescription, userGroupCode, dateCreated, createdByID, dateModified, modifiedByID FROM UserGroups");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+
+	echo json_encode($rows);
+}
+
+function getUserGroupByID($userGroupID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT userGroupID, userGroupName, userGroupDescription, userGroupCode, dateCreated, createdByID, dateModified, modifiedByID FROM UserGroups WHERE userGroupID = $userGroupID ");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+	
+    
+	echo json_encode($rows);
+}
+
+function delUserGroup($userGroupID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	$ids = explode(',',$userGroupID);
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	$msg = '';
+	$flag = 0;
+	foreach ($ids as $id) {
+		$result = $mysqli->query("DELETE FROM UserGroups WHERE userGroupID = $id ");
 		if ($result){
 			$msg .= 'Record(s) deleted successfully.,';
 		}

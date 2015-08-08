@@ -110,30 +110,42 @@ if (login_check($mysqli) == false) {
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clearCargoValues();">×</button>
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clearUserGroupValues();">×</button>
 										<h4 class="modal-title">Add/Edit User Group</h4>
 									</div>
 									<div class="modal-body">
-										<!--<form role="form" action="includes/functioncall.php" method="post" name="cargo_type">-->
 											<div class="row">
 												<div class="col-md-12">
+                                                    
 													<div class="form-group">
-														<label>Cargo Type Name</label>
+														<label>User Group Name</label>
 														<div>
-															<input type="hidden" class="form-control" name="cargoTypeID" id="cargoTypeID" value="0">
-															<input type="text" class="form-control" name="cargoTypeName" id="cargoTypeName" placeholder="Description">
-															<!--<input type="text" class="form-control" name="functionname" id="functionname" placeholder="Description">-->
+															<input type="hidden" class="form-control" name="userGroupID" id="userGroupID" value="0">
+															<input type="text" class="form-control" name="userGroupName" id="userGroupName" placeholder="Name">
 														</div>
 													</div>
+                                                    
+                                                    <div class="form-group">
+														<label>User Group Description</label>
+														<div>
+															<input type="text" class="form-control" name="userGroupDescription" id="userGroupDescription" placeholder="Description">
+														</div>
+													</div>
+                                                    
+                                                    <div class="form-group">
+														<label>User Group Code</label>
+														<div>
+															<input type="text" class="form-control" name="userGroupCode" id="userGroupCode" placeholder="Code">
+														</div>
+													</div>
+                                                    
 												</div>												
 											</div>
 										
 									</div>
 									<div class="modal-footer">
-										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearCargoValues();">Cancel</button>
-										<!--<button type="submit" class="btn btn-primary btn-lg" oonclick="setCargoTyp();">Submit</button>-->
-										<button type="button" class="btn btn-primary btn-lg" id="btnAddCargoRecord" onclick="setCargoType();">Save</button>
-										<!--</form>-->
+										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearUserGroupValues();">Cancel</button>
+										<button type="button" class="btn btn-primary btn-lg" id="btnAddUserGroupRecord" onclick="setUserGroup();">Save</button>
 									</div>
 								</div>
 							</div>
@@ -284,7 +296,7 @@ if (login_check($mysqli) == false) {
 					<!-- /inner content wrapper -->
 
                 </div>
-				<script src="appjs/cargotypess.js?86"></script>
+				<script src="appjs/usergroup.js?86"></script>
 				<script>
 				
 				function checkAll(ele,cls) {

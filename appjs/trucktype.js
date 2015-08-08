@@ -78,7 +78,7 @@ function editTruckType(id) {
 	dataType: 'json',
 	data: {functionname: 'getTruckTypeByID', truckTypeID: truckTypeID},
 	success: function(obj,textstatus){
-				console.log(obj);
+				//console.log(obj);
 		$.each(obj, function () {
 			$('#truckTypeID').val(this.truckTypeID);
 			$('#truckTypeName').val(this.truckTypeName);
