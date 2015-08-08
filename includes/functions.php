@@ -237,4 +237,40 @@ function getTruckTypeDropDown() {
 
 	return $result;
 }
+function getTerminalDropDown() {
+	$mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
+	$response = array();
+
+		$result = $mysqli->query("SELECT terminalID, terminalName FROM terminal");
+		//$response = mysqli_fetch_assoc($result);
+
+	return $result;
+}
+function getDestinationDropDown() {
+	$mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
+	$response = array();
+
+		$result = $mysqli->query("SELECT destinationID, destinationName FROM destination");
+		//$response = mysqli_fetch_assoc($result);
+
+	return $result;
+}
+function getTruckDropDown() {
+	$mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
+	$response = array();
+
+		$result = $mysqli->query("SELECT truckID, truckName, regNumb FROM truck");
+		//$response = mysqli_fetch_assoc($result);
+
+	return $result;
+}
+function getCargoTypeDropDown() {
+	$mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
+	$response = array();
+
+		$result = $mysqli->query("SELECT cargoTypeID, cargoTypeName FROM cargotype");
+		//$response = mysqli_fetch_assoc($result);
+
+	return $result;
+}
 ?>
