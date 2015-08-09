@@ -338,7 +338,7 @@ if (login_check($mysqli) == false) {
     <!-- page script -->
 	<script src="js/bootstrap-datatables.js"></script>
     <script src="js/datatables.js"></script>
-	<script src="js/pickers.js"></script>
+	<script src="plugins/colorpicker/js/bootstrap-colorpicker.js"></script>
 					<script>
 							//var db = $('.datatable').dateTable();
 							loading = '<div align="center"><img src="img/loading.gif" width="20" height="20" /></div>';
