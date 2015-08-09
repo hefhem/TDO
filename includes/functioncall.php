@@ -257,6 +257,30 @@ include_once 'functions.php';
 		delMenu($menuID, $mysqli);
 	}
 
+/*MenuItem Item*/
+	if ($functionname == 'setMenuItem'){
+		$menuItemID = $_POST["menuItemID"];
+        $menuMenuID = $_POST["menuMenuID"];
+		$menuItemName = $_POST["menuItemName"];
+		$menuItemDescription = $_POST["menuItemDescription"];
+		$menuItemCode = $_POST["menuItemCode"];
+        $menuItemRanking = $_POST["menuItemRanking"];
+		
+		setMenuItem($menuItemID, $menuMenuID, $menuItemName, $menuItemDescription, $menuItemCode, $menuItemRanking, $mysqli);
+	}
+	if ($functionname == 'getMenuItem'){	
+		getMenuItem($mysqli);
+	}
+	if ($functionname == 'getMenuItemByID'){
+		$menuItemID = $_POST["menuItemID"];		
+		getMenuItemByID($menuItemID, $mysqli);
+	}
+	if ($functionname == 'delMenuItem'){
+		$menuItemID = $_POST["menuItemID"];		
+		delMenuItem($menuItemID, $mysqli);
+	}
+
+
 /* Cargo Type*/
 
 function setCargoType($cargoTypeID, $cargoTypeName, $mysqli) {
@@ -1572,7 +1596,7 @@ function getMenuByID($MenuID,$mysqli) {
 		return json_encode($response);
 		exit();
 	}
-		$result = $mysqli->query("SELECT menuID, menuName, menuDesc, menuCode, menuRanking, dateCreated, createdByID, dateModified, modifiedByID FROM Menus WHERE menuID = $MenuID ");
+		$result = $mysqli->query("SELECT menuID, menuName, menuDesc, menuCode, menuRanking, dateCreated, createdByID, dateModified, modifiedByID FROM Menus WHERE menuID = $menuID ");
 
 		//use mysqli->affected_rows
 		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
@@ -1610,5 +1634,113 @@ function delMenu($MenuID,$mysqli) {
 	echo json_encode($response);
 }
 
+/* Menu Item */
+
+function setMenuItem($menuItemID, $menuMenuID, $menuItemName, $menuItemDescription, $menuItemCode, $menuItemRanking, $mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	
+	if ($menuItemID == 0) {
+		if ($stmt = $mysqli->prepare("INSERT INTO MenuItems (menuID, menuItemName, menuItemDescription, menuItemCode, menuItemRanking, createdByID, modifiedByID) VALUES(?, ?, ?, ?, ?, ?, ?)")) {
+        $stmt->bind_param('isssiii',$menuMenuID, $menuItemName, $menuItemDescription, $menuItemCode, $menuItemRanking, $user_id, $user_id);
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record inserted successfully.');
+			}
+		}	
+	} else {
+		if ($stmt = $mysqli->prepare("UPDATE MenuItems SET menuID = ?, menuItemName = ?, menuItemDescription = ?, menuItemCode = ?, menuItemRanking = ?, modifiedByID = ? WHERE menuItemID = ?")) {
+        $stmt->bind_param('isssiii',$menuMenuID, $menuItemName, $menuItemDescription, $menuItemCode, $menuItemRanking, $user_id, $menuItemID);
+ 
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record updated successfully.');
+			}
+		}	
+		
+	}
+    //echo($response);
+	echo json_encode($response);
+}
+
+function getMenuItem($mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT T0.menuItemID, T1.menuName, T0.menuItemName, T0.menuItemDescription, T0.menuItemCode, T0.menuItemRanking, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM MenuItems T0 INNER JOIN Menus T1 ON T1.menuID = T0.menuID ORDER BY T1.menuName ASC");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+
+	echo json_encode($rows);
+}
+
+function getMenuItemByID($menuItemID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT T0.menuItemID, T1.menuID, T0.menuItemName, T0.menuItemDescription, T0.menuItemCode, T0.menuItemRanking, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM MenuItems T0 INNER JOIN Menus T1 ON T1.menuID = T0.menuID WHERE T0.menuItemID = $menuItemID ");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+	
+    
+	echo json_encode($rows);
+}
+
+function delMenuItem($menuItemID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	$ids = explode(',',$menuItemID);
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	$msg = '';
+	$flag = 0;
+	foreach ($ids as $id) {
+		$result = $mysqli->query("DELETE FROM MenuItems WHERE menuItemID = $id ");
+		if ($result){
+			$msg .= 'Record(s) deleted successfully.,';
+		}
+	}
+		$response = array('isSuccess'=>'1', 'msg'=>$msg); 
+		
+	echo json_encode($response);
+}
 
 ?>
