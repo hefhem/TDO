@@ -30,7 +30,7 @@ if (login_check($mysqli) == false) {
 											</li>
                                             <li class=""><a href="#Menu" data-toggle="tab">Menus</a>
 											</li>
-											<li class=""><a href="#MenuItem" data-toggle="tab">MenuItem</a>
+											<li class=""><a href="#MenuItem" data-toggle="tab">Menu Items</a>
 											</li>
 											<li class=""><a href="#Forms" data-toggle="tab">Forms</a>
 											</li>
@@ -70,9 +70,26 @@ if (login_check($mysqli) == false) {
 												</div>
 											</div>
 											<div class="tab-pane fade in" id="MenuItem">
+                                                    <div class="col-sm-3">
+                                                        <?php 
+
+                                                            $result = getMenuDropDown(); 
+                                                            echo '<select class="form-control" id="menuMenuIDGrid" name="menuMenuIDGrid" onchange="javascript: getMenuItem();">';
+                                                            echo '<option value="0">Select Menu</option>';
+                                                                while ($menurow = mysqli_fetch_assoc($result)) {
+                                                                   echo '<option                                                                                                                                    value="'.$menurow['menuID'].'">'.$menurow['menuName'].'</option>';
+                                                                }
+
+                                                                $mysqli->close();
+
+                                                            echo '</select>';
+                                                        ?>
+												    </div>
+                                                <div class="col-sm-3">
 												<button class="btn btn-primary btn-sm" id="btnAddMenuItem" data-toggle="modal" data-target="#menuItemModal">New</button>
 												<button class="btn btn-sm" id="refreshMenuItem" onclick="getMenuItem();">Refresh</button>
 												<button class="btn btn-danger btn-sm" id="btnDelMultiMenuItem" onclick="deleteSelectedMenuItem();">Delete</button>
+                                                </div>
 												<br/>
 												<br/>
 												<div class="table-responsive no-border" id="divMenuItemTBL">

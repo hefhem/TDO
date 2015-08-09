@@ -78,14 +78,17 @@ success: function(obj,textstatus){
 
 function getMenuItem() {
     //alert('am here');
+    
+    menuMenuID = $('#menuMenuIDGrid').val();
+    
 	$.ajax({
 	type: "POST",
 	url: 'includes/functioncall.php',
 	dataType: 'json',
-	data: {functionname: 'getMenuItem'},
+	data: {functionname: 'getMenuItemByIDDropDown', menuMenuID: menuMenuID},
 	success: function(obj,textstatus){
 				
-				//console.log(obj);
+				console.log(obj);
 		var cls = 'selClsMenuItem';
 		var tbl = '<table class="table table-bordered datatable" id="tblMenuItem"> <thead> ' +
 		'<tr> <th style="width: 5%;"><input type="checkbox" value="" id="chkAllMenuItemType" onchange="checkAll(this,\'selClsMenuItem\'); countMenuItemCheckedBox();" /></th> ' +

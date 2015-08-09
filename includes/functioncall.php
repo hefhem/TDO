@@ -275,6 +275,10 @@ include_once 'functions.php';
 		$menuItemID = $_POST["menuItemID"];		
 		getMenuItemByID($menuItemID, $mysqli);
 	}
+    if ($functionname == 'getMenuItemByIDDropDown'){
+		$menuMenuID = $_POST["menuMenuID"];		
+		getMenuItemByIDDropDown($menuMenuID, $mysqli);
+	}
 	if ($functionname == 'delMenuItem'){
 		$menuItemID = $_POST["menuItemID"];		
 		delMenuItem($menuItemID, $mysqli);
@@ -1728,6 +1732,29 @@ function getMenuItemByID($menuItemID,$mysqli) {
 		exit();
 	}
 		$result = $mysqli->query("SELECT T0.menuItemID, T1.menuID, T0.menuItemName, T0.menuItemDescription, T0.menuItemCode, T0.menuItemRanking, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM MenuItems T0 INNER JOIN Menus T1 ON T1.menuID = T0.menuID WHERE T0.menuItemID = $menuItemID ");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+	
+    
+	echo json_encode($rows);
+}
+
+function getMenuItemByIDDropDown($menuMenuID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT T0.menuItemID, T1.menuID, T1.menuName, T0.menuItemName, T0.menuItemDescription, T0.menuItemCode, T0.menuItemRanking, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM MenuItems T0 INNER JOIN Menus T1 ON T1.menuID = T0.menuID WHERE T1.menuID = $menuMenuID ");
 
 		//use mysqli->affected_rows
 		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
