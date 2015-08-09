@@ -235,6 +235,28 @@ include_once 'functions.php';
 		delUserGroup($userGroupID, $mysqli);
 	}
 
+    /*Menu*/
+	if ($functionname == 'setMenu'){
+		$menuID = $_POST["menuID"];
+		$menuName = $_POST["menuName"];
+		$menuDescription = $_POST["menuDescription"];
+		$menuCode = $_POST["menuCode"];
+        $menuRanking = $_POST["menuRanking"];
+		
+		setMenu($menuID, $menuName, $menuDescription, $menuCode, $menuRanking, $mysqli);
+	}
+	if ($functionname == 'getMenu'){	
+		getMenu($mysqli);
+	}
+	if ($functionname == 'getMenuByID'){
+		$menuID = $_POST["menuID"];		
+		getMenuByID($menuID, $mysqli);
+	}
+	if ($functionname == 'delMenu'){
+		$menuID = $_POST["menuID"];		
+		delMenu($menuID, $mysqli);
+	}
+
 /* Cargo Type*/
 
 function setCargoType($cargoTypeID, $cargoTypeName, $mysqli) {
@@ -1470,6 +1492,115 @@ function delUserGroup($userGroupID,$mysqli) {
 	$flag = 0;
 	foreach ($ids as $id) {
 		$result = $mysqli->query("DELETE FROM UserGroups WHERE userGroupID = $id ");
+		if ($result){
+			$msg .= 'Record(s) deleted successfully.,';
+		}
+	}
+		$response = array('isSuccess'=>'1', 'msg'=>$msg); 
+		
+	echo json_encode($response);
+}
+
+/* Menu */
+
+function setMenu($menuID, $menuName, $menuDescription, $menuCode, $menuRanking, $mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	
+	if ($menuID == 0) {
+		if ($stmt = $mysqli->prepare("INSERT INTO Menus (menuName, menuDesc, menuCode, menuRanking, createdByID, modifiedByID) VALUES(?, ?, ?, ?, ?, ?)")) {
+        $stmt->bind_param('sssiii',$menuName, $menuDescription, $menuCode, $menuRanking, $user_id, $user_id);
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record inserted successfully.');
+			}
+		}	
+	} else {
+		if ($stmt = $mysqli->prepare("UPDATE Menus SET menuName = ?, menuDesc = ?, menuCode = ?, menuRanking = ?, modifiedByID = ? WHERE menuID = ?")) {
+        $stmt->bind_param('sssiii',$menuName, $menuDescription, $menuCode, $menuRanking, $user_id, $menuID);
+ 
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record updated successfully.');
+			}
+		}	
+		
+	}
+    //echo($response);
+	echo json_encode($response);
+}
+
+function getMenu($mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT menuID, menuName, menuDesc, menuCode, menuRanking, dateCreated, createdByID, dateModified, modifiedByID FROM Menus");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+
+	echo json_encode($rows);
+}
+
+function getMenuByID($MenuID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT menuID, menuName, menuDesc, menuCode, menuRanking, dateCreated, createdByID, dateModified, modifiedByID FROM Menus WHERE menuID = $MenuID ");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+	
+    
+	echo json_encode($rows);
+}
+
+function delMenu($MenuID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	$ids = explode(',',$MenuID);
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	$msg = '';
+	$flag = 0;
+	foreach ($ids as $id) {
+		$result = $mysqli->query("DELETE FROM Menus WHERE menuID = $id ");
 		if ($result){
 			$msg .= 'Record(s) deleted successfully.,';
 		}

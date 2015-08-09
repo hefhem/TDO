@@ -29,7 +29,7 @@ if (login_check($mysqli) == false) {
 											</li>
                                             <li class=""><a href="#Users" data-toggle="tab">Users</a>
 											</li>
-                                            <li class=""><a href="#Menus" data-toggle="tab">Menus</a>
+                                            <li class=""><a href="#Menu" data-toggle="tab">Menus</a>
 											</li>
 											<li class=""><a href="#MenuItem" data-toggle="tab">MenuItem</a>
 											</li>
@@ -60,13 +60,13 @@ if (login_check($mysqli) == false) {
 													
 												</div>
 											</div>
-                                            <div class="tab-pane fade in" id="Menus">
-												<button class="btn btn-primary btn-sm" id="btnAddMenus" data-toggle="modal" data-target="#menusModal">New</button>
-												<button class="btn btn-sm" id="refreshMenus" onclick="getMenus();">Refresh</button>
-												<button class="btn btn-danger btn-sm" id="btnDelMultiMenus" onclick="deleteSelectedMenus();">Delete</button>
+                                            <div class="tab-pane fade in" id="Menu">
+												<button class="btn btn-primary btn-sm" id="btnAddMenu" data-toggle="modal" data-target="#menuModal">New</button>
+												<button class="btn btn-sm" id="refreshMenu" onclick="getMenu();">Refresh</button>
+												<button class="btn btn-danger btn-sm" id="btnDelMultiMenu" onclick="deleteSelectedMenu();">Delete</button>
 												<br/>
 												<br/>
-												<div class="table-responsive no-border" id="divMenusTBL">
+												<div class="table-responsive no-border" id="divMenuTBL">
 													
 												</div>
 											</div>
@@ -186,28 +186,42 @@ if (login_check($mysqli) == false) {
 						</div>
                        
                        <!-- Menus Modal -->
-					   <div class="modal fade bs-modal-sm" id="menusModal" tabindex="-1" role="dialog" aria-hidden="true">
+					   <div class="modal fade bs-modal-sm" id="menuModal" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clearDriverValues();">×</button>
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clearMenuValues();">×</button>
 										<h4 class="modal-title">Add/Edit Menus</h4>
 									</div>
 									<div class="modal-body">
 											<div class="row">
 												<div class="col-md-12">
 													<div class="form-group">
-														<label>First Name</label>
+														<label>Menu Name</label>
 														<div>
-															<input type="hidden" class="form-control" name="driverID" id="driverID" value="0">
-															<input type="text" class="form-control" name="diverFirstName" id="diverFirstName" placeholder="First Name">
+															<input type="hidden" class="form-control" name="driverID" id="menuID" value="0">
+															<input type="text" class="form-control" name="menuName" id="menuName" placeholder="Name">
 														</div>
 													</div>
                                                     
                                                     <div class="form-group">
-														<label>Middle Name</label>
+														<label>Menu Description</label>
 														<div>
-															<input type="text" class="form-control" name="diverMiddleName" id="diverMiddleName" placeholder="Middle Name">
+															<input type="text" class="form-control" name="menuDescription" id="menuDescription" placeholder="Description">
+														</div>
+													</div>
+                                                    
+                                                    <div class="form-group">
+														<label>Menu Code</label>
+														<div>
+															<input type="text" class="form-control" name="menuCode" id="menuCode" placeholder="Code">
+														</div>
+													</div>
+                                                    
+                                                    <div class="form-group">
+														<label>Menu Ranking</label>
+														<div>
+															<input type="number" class="form-control" name="menuRanking" id="menuRanking" placeholder="Ranking">
 														</div>
 													</div>
                                                     
@@ -216,8 +230,8 @@ if (login_check($mysqli) == false) {
 										
 									</div>
 									<div class="modal-footer">
-										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearDriverValues();">Cancel</button>
-										<button type="button" class="btn btn-primary btn-lg" id="btnAddDriverRecord" onclick="setDriver();">Save</button>
+										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearMenuValues();">Cancel</button>
+										<button type="button" class="btn btn-primary btn-lg" id="btnAddMenuRecord" onclick="setMenu();">Save</button>
 									</div>
 								</div>
 							</div>
@@ -297,6 +311,7 @@ if (login_check($mysqli) == false) {
 
                 </div>
 				<script src="appjs/usergroup.js?86"></script>
+                <script src="appjs/menu.js"></script>
 				<script>
 				
 				function checkAll(ele,cls) {
