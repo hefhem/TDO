@@ -22,10 +22,6 @@ if (login_check($mysqli) == false) {
     <title>TDO Solution</title>
 
     <!-- page level plugin styles -->
-	<link rel="stylesheet" href="plugins/datepicker/datepicker.css">
-    <link rel="stylesheet" href="plugins/timepicker/jquery.timepicker.css">
-    <link rel="stylesheet" href="plugins/colorpicker/css/colorpicker.css">
-    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
 	 <link rel="stylesheet" href="plugins/chosen/chosen.min.css">
     <link rel="stylesheet" href="plugins/datatables/jquery.dataTables.css">
     <!-- /page level plugin styles -->
@@ -328,17 +324,12 @@ if (login_check($mysqli) == false) {
 	 <script src="plugins/parsley.min.js"></script>
     <script src="js/offscreen.js"></script>
     <script src="js/main.js"></script>
-	<script src="plugins/moment.js"></script>
-    <script src="plugins/daterangepicker/daterangepicker.js"></script>
-    <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
-    <script src="plugins/timepicker/jquery.timepicker.min.js"></script>
 	
     <!-- /template scripts -->
 
     <!-- page script -->
 	<script src="js/bootstrap-datatables.js"></script>
     <script src="js/datatables.js"></script>
-	<script src="js/pickers.js"></script>
 					<script>
 							//var db = $('.datatable').dateTable();
 							loading = '<div align="center"><img src="img/loading.gif" width="20" height="20" /></div>';

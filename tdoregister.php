@@ -28,7 +28,6 @@ if (login_check($mysqli) == false) {
                                 <div class="" align="center">
                                     <button class="btn btn-primary" id="btnAddPort" data-toggle="modal" data-target="#findModal">Find</button>
                                     <button type="submit" class="btn btn-default" id="btnRefresh">Refresh</button>
-									<button type="submit" class="btn btn-primary" id="btnAddRegister">New</button>
                                     <button type="submit" class="btn btn-success" id="btnAddRegister">Save</button>
                                     
                                 </div>
@@ -43,7 +42,7 @@ if (login_check($mysqli) == false) {
                             <div class="form-group">
                                 <label for="jobNumber" class="col-sm-4 control-label">Job Number</label>
                                 <div class="col-sm-7">
-                                    <input type="text" readonly="readonly" class="form-control" id="jobNumber" value="<?php echo getJobNumber($mysqli); ?>">
+                                    <input type="text" readonly="readonly" class="form-control" id="jobNumber" placeholder="">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -98,22 +97,10 @@ if (login_check($mysqli) == false) {
 									?>
                                 </div>
                             </div>
-							<div class="form-group">
-                                <label for="loadingDate" class="col-sm-4 control-label">Loading Date</label>
-                                <div class="col-sm-7">
-                                    <input type="date" class="form-control" id="loadingDate" placeholder="dd/mm/yyyy">
-                                </div>
-                            </div>
                             <div class="form-group">
                                 <label for="loadingTime" class="col-sm-4 control-label">Loading Time</label>
                                 <div class="col-sm-7">
                                     <input type="time" class="form-control" id="loadingTime" placeholder="hh:mm:ss">
-                                </div>
-                            </div>
-							<div class="form-group">
-                                <label for="dispatchDate" class="col-sm-4 control-label">Dispatch Date</label>
-                                <div class="col-sm-7">
-                                    <input type="date" class="form-control" id="dispatchDate" placeholder="dd/mm/yyyy">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -229,7 +216,7 @@ if (login_check($mysqli) == false) {
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clearStateValues();">×</button>
                 <h4 class="modal-title">Find Register</h4>
             </div>
             <div class="modal-body">
@@ -243,7 +230,7 @@ if (login_check($mysqli) == false) {
                 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearStateValues();">Close</button>
                 
                 <!--</form>-->
             </div>
