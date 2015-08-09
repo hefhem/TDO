@@ -303,6 +303,15 @@ function getMenuDropDown() {
 
 	return $result;
 }
+function getMenuItemDropDown() {
+	$mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
+	$response = array();
+
+		$result = $mysqli->query("SELECT menuItemID, menuItemName FROM MenuItems");
+		//$response = mysqli_fetch_assoc($result);
+
+	return $result;
+}
 function getJobNumber($mysqli){
 	$currentYearAndMonth = date("Ym");
 	$jobNumber = '';

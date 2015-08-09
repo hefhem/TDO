@@ -257,7 +257,7 @@ include_once 'functions.php';
 		delMenu($menuID, $mysqli);
 	}
 
-/*MenuItem Item*/
+    /*MenuItem Item*/
 	if ($functionname == 'setMenuItem'){
 		$menuItemID = $_POST["menuItemID"];
         $menuMenuID = $_POST["menuMenuID"];
@@ -278,6 +278,28 @@ include_once 'functions.php';
 	if ($functionname == 'delMenuItem'){
 		$menuItemID = $_POST["menuItemID"];		
 		delMenuItem($menuItemID, $mysqli);
+	}
+
+    /*Form Item*/
+	if ($functionname == 'setForm'){
+		$formID = $_POST["formID"];
+        $menuItemMenuID = $_POST["menuItemMenuID"];
+		$formName = $_POST["formName"];
+		$formDescription = $_POST["formDescription"];
+		$formCode = $_POST["formCode"];
+		
+		setForm($formID, $menuItemMenuID, $formName, $formDescription, $formCode, $mysqli);
+	}
+	if ($functionname == 'getForm'){	
+		getForm($mysqli);
+	}
+	if ($functionname == 'getFormByID'){
+		$formID = $_POST["formID"];		
+		getFormByID($formID, $mysqli);
+	}
+	if ($functionname == 'delForm'){
+		$formID = $_POST["formID"];		
+		delForm($formID, $mysqli);
 	}
 
 
@@ -1734,6 +1756,115 @@ function delMenuItem($menuItemID,$mysqli) {
 	$flag = 0;
 	foreach ($ids as $id) {
 		$result = $mysqli->query("DELETE FROM MenuItems WHERE menuItemID = $id ");
+		if ($result){
+			$msg .= 'Record(s) deleted successfully.,';
+		}
+	}
+		$response = array('isSuccess'=>'1', 'msg'=>$msg); 
+		
+	echo json_encode($response);
+}
+
+/* Form Item */
+
+function setForm($formID, $menuItemMenuID, $formName, $formDescription, $formCode, $mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	
+	if ($formID == 0) {
+		if ($stmt = $mysqli->prepare("INSERT INTO Forms (menuItemID, formName, formDescription, formCode, createdByID, modifiedByID) VALUES(?, ?, ?, ?, ?, ?)")) {
+        $stmt->bind_param('isssii',$menuItemMenuID, $formName, $formDescription, $formCode, $user_id, $user_id);
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record inserted successfully.');
+			}
+		}	
+	} else {
+		if ($stmt = $mysqli->prepare("UPDATE Forms SET menuItemID = ?, formName = ?, formDescription = ?, formCode = ?, modifiedByID = ? WHERE formID = ?")) {
+        $stmt->bind_param('isssii',$menuItemMenuID, $formName, $formDescription, $formCode, $user_id, $formID);
+ 
+			// Execute the prepared query. 
+			if ($stmt->execute()) {
+				$response = array('isSuccess'=>'1', 'msg'=>'Record updated successfully.');
+			}
+		}	
+		
+	}
+    //echo($response);
+	echo json_encode($response);
+}
+
+function getForm($mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT T0.formID, T1.menuItemName, T0.formName, T0.formDescription, T0.formCode, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM Forms T0 INNER JOIN MenuItems T1 ON T1.menuItemID = T0.menuItemID ORDER BY T1.menuItemName ASC");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+
+	echo json_encode($rows);
+}
+
+function getFormByID($formID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT T0.formID, T1.menuItemID, T0.formName, T0.formDescription, T0.formCode, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM Forms T0 INNER JOIN MenuItems T1 ON T1.menuItemID = T0.menuItemID WHERE T0.formID = $formID ");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+	
+    
+	echo json_encode($rows);
+}
+
+function delForm($formID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	$ids = explode(',',$formID);
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		return json_encode($response);
+		exit();
+	}
+	$msg = '';
+	$flag = 0;
+	foreach ($ids as $id) {
+		$result = $mysqli->query("DELETE FROM Forms WHERE formID = $id ");
 		if ($result){
 			$msg .= 'Record(s) deleted successfully.,';
 		}

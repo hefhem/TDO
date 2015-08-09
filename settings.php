@@ -9,7 +9,6 @@ if (login_check($mysqli) == false) {
 }
 ?>
 
-				
 				<div class="content-wrap">
 
                     <!-- inner content wrapper -->
@@ -81,12 +80,12 @@ if (login_check($mysqli) == false) {
 												</div>
 											</div>
 											<div class="tab-pane fade in" id="Forms">
-												<button class="btn btn-primary btn-sm" id="btnAddForms" data-toggle="modal" data-target="#formsModal">New</button>
-												<button class="btn btn-sm" id="refreshForms" onclick="getForms();">Refresh</button>
-												<button class="btn btn-danger btn-sm" id="btnDelMultiForms" onclick="deleteSelectedForms();">Delete</button>
+												<button class="btn btn-primary btn-sm" id="btnAddForm" data-toggle="modal" data-target="#formModal">New</button>
+												<button class="btn btn-sm" id="refreshForm" onclick="getForm();">Refresh</button>
+												<button class="btn btn-danger btn-sm" id="btnDelMultiForm" onclick="deleteSelectedForm();">Delete</button>
 												<br/>
 												<br/>
-												<div class="table-responsive no-border" id="divFormsTBL">
+												<div class="table-responsive no-border" id="divFormTBL">
 													
 												</div>
 											</div>
@@ -310,48 +309,78 @@ if (login_check($mysqli) == false) {
 						</div>
                        
 						<!-- Forms Modal -->
-					   <div class="modal fade bs-modal-sm" id="formsModal" tabindex="-1" role="dialog" aria-hidden="true">
+					   <div class="modal fade bs-modal-sm" id="formModal" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clearStateValues();">×</button>
-										<h4 class="modal-title">Add/Edit Form</h4>
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clearFormValues();">×</button>
+										<h4 class="modal-title">Add/Edit Forms</h4>
 									</div>
 									<div class="modal-body">
-										<!--<form role="form" action="includes/functioncall.php" method="post" name="cargo_type">-->
 											<div class="row">
 												<div class="col-md-12">
-													<div class="form-group">
-														<label>State Name</label>
+                                                    
+                                                    <div class="form-group">
+														<label>Menu Name</label>
 														<div>
-															<input type="hidden" class="form-control" name="stateID" id="stateID" value="0">
-															<input type="text" class="form-control" name="stateName" id="stateName" placeholder="State Name">
-															<input type="hidden" class="form-control" name="functionname" id="functionname" value="setState">
-														</div>
-														<label>State Code</label>
-														<div>
-															<input type="text" class="form-control" name="stateCode" id="stateCode" placeholder="State Code">
+															<?php 
+                                                                
+                                                                $result = getMenuItemDropDown(); 
+                                                                echo '<select class="form-control" id="menuItemMenuID" name="menuItemMenuID">';
+                                                                echo '<option value="0">Select Menu Item</option>';
+                                                                    while ($menuitemrow = mysqli_fetch_assoc($result)) {
+                                                                       echo '<option                                                                                                                                    value="'.$menuitemrow['menuItemID'].'">'.$menuitemrow['menuItemName'].'</option>';
+                                                                    }
+
+                                                                    $mysqli->close();
+
+                                                                echo '</select>';
+                                                            ?>
 														</div>
 													</div>
+                                                    
+													<div class="form-group">
+														<label>Form Name</label>
+														<div>
+															<input type="hidden" class="form-control" name="formID" id="formID" value="0">
+															<input type="text" class="form-control" name="formName" id="formName" placeholder="Name">
+														</div>
+													</div>
+                                                    
+                                                    <div class="form-group">
+														<label>Form Description</label>
+														<div>
+															<input type="text" class="form-control" name="formDescription" id="formDescription" placeholder="Description">
+														</div>
+													</div>
+                                                    
+                                                    <div class="form-group">
+														<label>Form Code</label>
+														<div>
+															<input type="text" class="form-control" name="formCode" id="formCode" placeholder="Code">
+														</div>
+													</div>
+                                                    
 												</div>												
 											</div>
 										
 									</div>
 									<div class="modal-footer">
-										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearStateValues();">Cancel</button>
-										<button type="submit" class="btn btn-primary btn-lg" id="btnAddStateRecord" onclick="setState();">Save</button>
-										<!--</form>-->
+										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearFormValues();">Cancel</button>
+										<button type="button" class="btn btn-primary btn-lg" id="btnAddFormRecord" onclick="setForm();">Save</button>
 									</div>
 								</div>
 							</div>
 						</div>
+                       
+                       
 				   </div>
-					<!-- /inner content wrapper -->
 
                 </div>
 				<script src="appjs/usergroup.js?86"></script>
                 <script src="appjs/menu.js"></script>
                 <script src="appjs/menuItem.js"></script>
+                <script src="appjs/form.js"></script>
 				<script>
 				
 				function checkAll(ele,cls) {
