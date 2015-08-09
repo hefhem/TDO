@@ -26,7 +26,28 @@ function sec_session_start() {
     // Sets the session name to the one set above.
     session_name($session_name);
     session_start();            // Start the PHP session 
-    //session_regenerate_id(true);    // regenerated the session, delete the old one. 
+    //session_regenerate_id(true);    // regenerated the session, delete the old one.
+		
+	//Expire the session if user is inactive for 30min or more.
+	$expireAfter = 30;
+	
+	//check to if last action session variable has been set.
+	if(isset($_SESSION['last_action'])){
+		//get how many seconds have passed since the user was last active.
+		$secondsInactive = time() - $_SESSION['last_action'];
+		
+		//convert our minute into seconds.
+		$expireAfterSeconds = $expireAfter * 60;
+		
+		//check to see if they have active for too long.
+		if($secondsInactive >= $expireAfterSeconds){
+			//user has been inactive for too long.
+			//kill the session
+			session_unset();
+			session_destroy();
+		}
+	}
+	$_SESSION['last_action'] = time();
 }
 
 function login($email, $password, $mysqli) {
@@ -281,5 +302,38 @@ function getMenuDropDown() {
 		//$response = mysqli_fetch_assoc($result);
 
 	return $result;
+}
+function getJobNumber($mysqli){
+	$currentYearAndMonth = date("Ym");
+	$jobNumber = '';
+	$defaultJobNumber = $currentYearAndMonth.'0001';
+	
+	$stmt = $mysqli->prepare("SELECT IFNULL(MAX(jobnumber),0) as jobNumber FROM tdoregister"); 
+	//$stmt->bind_param('i',1);
+	$stmt->execute();   // Execute the prepared query.
+	$stmt->store_result();
+
+	if ($stmt->num_rows == 1) {
+		// If the user exists get variables from result.
+		$stmt->bind_result($jobNumber);
+		$stmt->fetch();
+	}
+	
+	if ($jobNumber == 0) {
+		$jobNumber = $defaultJobNumber;
+	} else {
+		$firstPart = substr($jobNumber,0,6);
+		$secondPart = substr($jobNumber,6);
+		
+		if ($firstPart == $currentYearAndMonth){
+			$jobNumber += $jobNumber; 			
+		} else {
+			$jobNumber = $defaultJobNumber;
+		}
+		
+	}
+	
+	return $jobNumber;
+	
 }
 ?>
