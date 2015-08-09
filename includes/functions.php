@@ -273,4 +273,13 @@ function getCargoTypeDropDown() {
 
 	return $result;
 }
+function getMenuDropDown() {
+	$mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
+	$response = array();
+
+		$result = $mysqli->query("SELECT menuID, menuName FROM Menus");
+		//$response = mysqli_fetch_assoc($result);
+
+	return $result;
+}
 ?>

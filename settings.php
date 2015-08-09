@@ -237,34 +237,73 @@ if (login_check($mysqli) == false) {
 							</div>
 						</div>
 						
-						<!-- Menu Items Modal -->
+						<!-- MenuItem Item Modal -->
 					   <div class="modal fade bs-modal-sm" id="menuItemModal" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clearRegionValues();">×</button>
-										<h4 class="modal-title">Add/Edit Menu Item</h4>
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clearMenuItemValues();">×</button>
+										<h4 class="modal-title">Add/Edit MenuItems</h4>
 									</div>
 									<div class="modal-body">
-										<!--<form role="form" action="includes/functioncall.php" method="post" name="cargo_type">-->
 											<div class="row">
 												<div class="col-md-12">
-													<div class="form-group">
-														<label>Region Name</label>
+                                                    
+                                                    <div class="form-group">
+														<label>Menu Name</label>
 														<div>
-															<input type="hidden" class="form-control" name="regionID" id="regionID" value="0">
-															<input type="text" class="form-control" name="regionName" id="regionName" placeholder="Description">
-															<input type="hidden" class="form-control" name="functionname" id="functionname" value="setRegion">
+															<?php 
+                                                                
+                                                                $result = getMenuDropDown(); 
+                                                                echo '<select class="form-control" id="menuMenuID" name="menuMenuID">';
+                                                                echo '<option value="0">Select Menu</option>';
+                                                                    while ($menurow = mysqli_fetch_assoc($result)) {
+                                                                       echo '<option                                                                                                                                    value="'.$menurow['menuID'].'">'.$menurow['menuName'].'</option>';
+                                                                    }
+
+                                                                    $mysqli->close();
+
+                                                                echo '</select>';
+                                                            ?>
 														</div>
 													</div>
+                                                    
+													<div class="form-group">
+														<label>Menu Item Name</label>
+														<div>
+															<input type="hidden" class="form-control" name="menuItemID" id="menuItemID" value="0">
+															<input type="text" class="form-control" name="menuItemName" id="menuItemName" placeholder="Name">
+														</div>
+													</div>
+                                                    
+                                                    <div class="form-group">
+														<label>Menu Item Description</label>
+														<div>
+															<input type="text" class="form-control" name="menuItemDescription" id="menuItemDescription" placeholder="Description">
+														</div>
+													</div>
+                                                    
+                                                    <div class="form-group">
+														<label>Menu Item Code</label>
+														<div>
+															<input type="text" class="form-control" name="menuItemCode" id="menuItemCode" placeholder="Code">
+														</div>
+													</div>
+                                                    
+                                                    <div class="form-group">
+														<label>Menu Item Ranking</label>
+														<div>
+															<input type="number" class="form-control" name="menuItemRanking" id="menuItemRanking" placeholder="Ranking">
+														</div>
+													</div>
+                                                    
 												</div>												
 											</div>
 										
 									</div>
 									<div class="modal-footer">
-										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearRegionValues();">Cancel</button>
-										<button type="submit" class="btn btn-primary btn-lg" id="btnAddRegionRecord" onclick="setRegion();">Save</button>
-										<!--</form>-->
+										<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" onclick="clearMenuItemValues();">Cancel</button>
+										<button type="button" class="btn btn-primary btn-lg" id="btnAddMenuItemRecord" onclick="setMenuItem();">Save</button>
 									</div>
 								</div>
 							</div>
@@ -312,6 +351,7 @@ if (login_check($mysqli) == false) {
                 </div>
 				<script src="appjs/usergroup.js?86"></script>
                 <script src="appjs/menu.js"></script>
+                <script src="appjs/menuItem.js"></script>
 				<script>
 				
 				function checkAll(ele,cls) {
