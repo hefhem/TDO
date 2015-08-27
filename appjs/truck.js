@@ -35,7 +35,7 @@ if (truckTruckTypeID == '0' || truckTruckTypeID == '') {
 
 $.ajax({
 type: "POST",
-url: 'includes/functioncall.php',
+url: 'includes/db_connect_functioncall.php',
 dataType: 'json',
 data: {functionname: 'setTruck', truckID: truckID, truckName: truckName, regNumb: regNumb, truckTruckTypeID: truckTruckTypeID},
 success: function(obj,textstatus){
@@ -64,7 +64,7 @@ function getTruck() {
 	//alert('1');
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getTruck'},
 	success: function(obj,textstatus){
@@ -72,9 +72,9 @@ function getTruck() {
 				//console.log(obj);
 				
 		var tbl = '<table class="table table-bordered datatable" id="tblTruck"> <thead> ' +
-		'<tr> <th style="width: 25px;"><input type="checkbox" value="" id="chkAllTruckType" onchange="checkAll(this,\'selClsTruck\'); countTruckCheckedBox();" /></th> ' +
+		'<tr> <th style="width: 25px;"><input type="checkbox" value="" id="chkAllTruck" onchange="checkAll(this,\'selClsTruck\'); countTruckCheckedBox();" /></th> ' +
 		' <th><strong>Truck Name</strong></th><th><strong>Truck Type</strong></th><th><strong>Reg. No.</strong></th><th><strong>Edit</strong></th> </tr>  </thead>  <tbody id="tbodyTruck"> ';
-		$('#divTruckTBL').html('');
+		//$('#divTruckTBL').html('');
         $('#divTruckTBL').html(IMG_LOAD);
 		
         $.each(obj, function () {
@@ -96,7 +96,7 @@ function editTruck(id) {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getTruckByID', truckID: truckID},
 	success: function(obj,textstatus){
@@ -145,7 +145,7 @@ function deleteSelectedTruck() {
 					
 		$.ajax({
 		type: "POST",
-		url: 'includes/functioncall.php',
+		url: 'includes/db_connect_functioncall.php',
 		dataType: 'json',
 		data: {functionname: 'delTruck', truckID: sel_IDs},
 		success: function(obj,textstatus){

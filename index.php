@@ -1,6 +1,6 @@
 <?php
 include_once 'includes/db_connect.php';
-include_once 'includes/functions.php';
+include_once 'includes/db_connect_functions.php';
  
 sec_session_start();
  
@@ -263,7 +263,7 @@ if (login_check($mysqli) == false) {
                                     </a>
                                 </li>
 								<li>
-                                    <a href="javascript:;" onclick="javascript: ld_fm2('Setup.php');" >
+                                    <a href="javascript:;" onclick="javascript: ld_fm2('setup.php');" >
                                         <span>Setup</span>
                                     </a>
                                 </li>

@@ -1,8 +1,8 @@
 <?php
 
 //header('Content-Type: application/json');
-include_once 'db_connect.php';   // As functions.php is not included
-include_once 'functions.php';
+include_once 'db_connect.php';   // As xyz.php is not included
+include_once 'db_connect_functions.php';
 	sec_session_start();
 	
 	if (login_check($mysqli) == false) {
@@ -324,7 +324,7 @@ function setCargoType($cargoTypeID, $cargoTypeName, $mysqli) {
 	}
 
 	if ($cargoTypeID == 0) {
-		if ($stmt = $mysqli->prepare("INSERT INTO CargoType (cargoTypeName, createdByID, modifiedBy) VALUES(?, ?, ?)")) {
+		if ($stmt = $mysqli->prepare("INSERT INTO cargotype (cargoTypeName, createdByID, modifiedBy) VALUES(?, ?, ?)")) {
         $stmt->bind_param('sss',$cargoTypeName, $user_id, $user_id);
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
@@ -332,7 +332,7 @@ function setCargoType($cargoTypeID, $cargoTypeName, $mysqli) {
 			}
 		}	
 	} else {
-		if ($stmt = $mysqli->prepare("UPDATE CargoType SET cargoTypeName = ?, modifiedBy = ? WHERE cargoTypeID = ?")) {
+		if ($stmt = $mysqli->prepare("UPDATE cargotype SET cargoTypeName = ?, modifiedBy = ? WHERE cargoTypeID = ?")) {
         $stmt->bind_param('sii',$cargoTypeName, $user_id, $cargoTypeID);
  
 			// Execute the prepared query. 
@@ -358,7 +358,7 @@ function getCargoType($mysqli) {
 		return json_encode($response);
 		exit();
 	}
-		$result = $mysqli->query("CALL getCargoType");
+		$result = $mysqli->query("SELECT cargoTypeID, cargoTypeName, dateCreated, createdByID, dateModified, modifiedBy FROM cargotype");
 
 		//use mysqli->affected_rows
 		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
@@ -449,7 +449,7 @@ function setTruckType($truckTypeID, $truckTypeName, $mysqli) {
 	}
 
 	if ($truckTypeID == 0) {
-		if ($stmt = $mysqli->prepare("INSERT INTO TruckType (truckTypeName, createdByID, modifiedBy) VALUES(?, ?, ?)")) {
+		if ($stmt = $mysqli->prepare("INSERT INTO trucktype (truckTypeName, createdByID, modifiedBy) VALUES(?, ?, ?)")) {
         $stmt->bind_param('sss',$truckTypeName, $user_id, $user_id);
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
@@ -457,7 +457,7 @@ function setTruckType($truckTypeID, $truckTypeName, $mysqli) {
 			}
 		}	
 	} else {
-		if ($stmt = $mysqli->prepare("UPDATE TruckType SET truckTypeName = ?, modifiedBy = ? WHERE truckTypeID = ?")) {
+		if ($stmt = $mysqli->prepare("UPDATE trucktype SET truckTypeName = ?, modifiedBy = ? WHERE truckTypeID = ?")) {
         $stmt->bind_param('sii',$truckTypeName, $user_id, $truckTypeID);
  
 			// Execute the prepared query. 
@@ -576,7 +576,7 @@ function setDriver($driverID, $driverCode, $driverFirstName, $driverMiddleName, 
 			}
 		}	
 	} else {
-		if ($stmt = $mysqli->prepare("UPDATE Driver SET driverCode = ?, firstName = ?, middleName = ?, lastName = ?, modifiedBy = ? WHERE driverID = ?")) {
+		if ($stmt = $mysqli->prepare("UPDATE driver SET driverCode = ?, firstName = ?, middleName = ?, lastName = ?, modifiedBy = ? WHERE driverID = ?")) {
         $stmt->bind_param('ssssii',$driverCode, $driverFirstName, $driverMiddleName, $driverLastName, $user_id, $driverID);
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
@@ -679,7 +679,7 @@ function setRegion($regionID, $regionName, $mysqli) {
 	}
 
 	if ($regionID == 0) {
-		if ($stmt = $mysqli->prepare("INSERT INTO Region (regionName, createdByID, modifiedBy) VALUES(?, ?, ?)")) {
+		if ($stmt = $mysqli->prepare("INSERT INTO region (regionName, createdByID, modifiedBy) VALUES(?, ?, ?)")) {
         $stmt->bind_param('sii',$regionName, $user_id, $user_id);
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
@@ -687,7 +687,7 @@ function setRegion($regionID, $regionName, $mysqli) {
 			}
 		}	
 	} else {
-		if ($stmt = $mysqli->prepare("UPDATE Region SET regionName = ?, modifiedBy = ? WHERE regionID = ?")) {
+		if ($stmt = $mysqli->prepare("UPDATE region SET regionName = ?, modifiedBy = ? WHERE regionID = ?")) {
         $stmt->bind_param('sii',$regionName, $user_id, $regionID);
  
 			// Execute the prepared query. 
@@ -713,7 +713,7 @@ function getRegion($mysqli) {
 		return json_encode($response);
 		exit();
 	}
-		$result = $mysqli->query("CALL getRegion");
+		$result = $mysqli->query("SELECT regionID, regionName, dateCreated, createdByID, dateModified, modifiedBy FROM region");
 
 		//use mysqli->affected_rows
 		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
@@ -789,7 +789,7 @@ function setState($stateID, $stateName, $stateCode, $mysqli) {
 	}
 	
 	if ($stateID == 0) {
-		if ($stmt = $mysqli->prepare("INSERT INTO State (stateName, stateCode, createdByID, modifiedBy) VALUES(?, ?, ?, ?)")) {
+		if ($stmt = $mysqli->prepare("INSERT INTO state (stateName, stateCode, createdByID, modifiedBy) VALUES(?, ?, ?, ?)")) {
         $stmt->bind_param('ssii',$stateName, $stateCode, $user_id, $user_id);
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
@@ -797,7 +797,7 @@ function setState($stateID, $stateName, $stateCode, $mysqli) {
 			}
 		}	
 	} else {
-		if ($stmt = $mysqli->prepare("UPDATE State SET stateName = ?, stateCode = ?, modifiedBy = ? WHERE stateID = ?")) {
+		if ($stmt = $mysqli->prepare("UPDATE state SET stateName = ?, stateCode = ?, modifiedBy = ? WHERE stateID = ?")) {
         $stmt->bind_param('ssii',$stateName, $stateCode, $user_id, $stateID);
  
 			// Execute the prepared query. 
@@ -899,7 +899,7 @@ function setCity($cityID, $cityName, $cityCode, $cityStateID, $mysqli) {
 	}
 	
 	if ($cityID == 0) {
-		if ($stmt = $mysqli->prepare("INSERT INTO City (cityName, cityCode, stateID, createdByID, modifiedBy) VALUES(?, ?, ?, ?, ?)")) {
+		if ($stmt = $mysqli->prepare("INSERT INTO city (cityName, cityCode, stateID, createdByID, modifiedBy) VALUES(?, ?, ?, ?, ?)")) {
         $stmt->bind_param('ssiii',$cityName, $cityCode, $cityStateID, $user_id, $user_id);
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
@@ -907,7 +907,7 @@ function setCity($cityID, $cityName, $cityCode, $cityStateID, $mysqli) {
 			}
 		}	
 	} else {
-		if ($stmt = $mysqli->prepare("UPDATE City SET cityName = ?, cityCode = ?, stateID = ?, modifiedBy = ? WHERE cityID = ?")) {
+		if ($stmt = $mysqli->prepare("UPDATE city SET cityName = ?, cityCode = ?, stateID = ?, modifiedBy = ? WHERE cityID = ?")) {
         $stmt->bind_param('ssiii',$cityName, $cityCode, $cityStateID, $user_id, $cityID);
  
 			// Execute the prepared query. 
@@ -1010,7 +1010,7 @@ function setLocation($locationID, $locationName, $locationRegionID, $mysqli) {
 	}
 	
 	if ($locationID == 0) {
-		if ($stmt = $mysqli->prepare("INSERT INTO Location (locationName, regionID, createdByID, modifiedBy) VALUES(?, ?, ?, ?)")) {
+		if ($stmt = $mysqli->prepare("INSERT INTO location (locationName, regionID, createdByID, modifiedBy) VALUES(?, ?, ?, ?)")) {
         $stmt->bind_param('siii',$locationName, $locationRegionID, $user_id, $user_id);
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
@@ -1018,7 +1018,7 @@ function setLocation($locationID, $locationName, $locationRegionID, $mysqli) {
 			}
 		}	
 	} else {
-		if ($stmt = $mysqli->prepare("UPDATE Location SET locationName = ?, regionID = ?, modifiedBy = ? WHERE locationID = ?")) {
+		if ($stmt = $mysqli->prepare("UPDATE location SET locationName = ?, regionID = ?, modifiedBy = ? WHERE locationID = ?")) {
         $stmt->bind_param('siii',$locationName, $locationRegionID, $user_id, $locationID);
  
 			// Execute the prepared query. 
@@ -1122,7 +1122,7 @@ function setPort($portID, $portName, $portLocationID, $mysqli) {
 	}
 	
 	if ($portID == 0) {
-		if ($stmt = $mysqli->prepare("INSERT INTO Port (portName, locationID, createdByID, modifiedBy) VALUES(?, ?, ?, ?)")) {
+		if ($stmt = $mysqli->prepare("INSERT INTO port (portName, locationID, createdByID, modifiedBy) VALUES(?, ?, ?, ?)")) {
         $stmt->bind_param('siii',$portName, $portLocationID, $user_id, $user_id);
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
@@ -1130,7 +1130,7 @@ function setPort($portID, $portName, $portLocationID, $mysqli) {
 			}
 		}	
 	} else {
-		if ($stmt = $mysqli->prepare("UPDATE Port SET portName = ?, locationID = ?, modifiedBy = ? WHERE portID = ?")) {
+		if ($stmt = $mysqli->prepare("UPDATE port SET portName = ?, locationID = ?, modifiedBy = ? WHERE portID = ?")) {
         $stmt->bind_param('siii',$portName, $portLocationID, $user_id, $portID);
  
 			// Execute the prepared query. 
@@ -1234,7 +1234,7 @@ function setTerminal($terminalID, $terminalName, $terminalPortID, $mysqli) {
 	}
 	
 	if ($terminalID == 0) {
-		if ($stmt = $mysqli->prepare("INSERT INTO Terminal (terminalName, portID, createdByID, modifiedBy) VALUES(?, ?, ?, ?)")) {
+		if ($stmt = $mysqli->prepare("INSERT INTO terminal (terminalName, portID, createdByID, modifiedBy) VALUES(?, ?, ?, ?)")) {
         $stmt->bind_param('siii',$terminalName, $terminalPortID, $user_id, $user_id);
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
@@ -1242,7 +1242,7 @@ function setTerminal($terminalID, $terminalName, $terminalPortID, $mysqli) {
 			}
 		}	
 	} else {
-		if ($stmt = $mysqli->prepare("UPDATE Terminal SET terminalName = ?, portID = ?, modifiedBy = ? WHERE terminalID = ?")) {
+		if ($stmt = $mysqli->prepare("UPDATE terminal SET terminalName = ?, portID = ?, modifiedBy = ? WHERE terminalID = ?")) {
         $stmt->bind_param('siii',$terminalName, $terminalPortID, $user_id, $terminalID);
  
 			// Execute the prepared query. 
@@ -1346,7 +1346,7 @@ function setTruck($truckID, $truckName, $regNumb, $truckTruckTypeID, $mysqli) {
 	}
 	
 	if ($truckID == 0) {
-		if ($stmt = $mysqli->prepare("INSERT INTO Truck (truckName, regNumb, truckTypeID, createdByID, modifiedBy) VALUES(?, ?, ?, ?, ?)")) {
+		if ($stmt = $mysqli->prepare("INSERT INTO truck (truckName, regNumb, truckTypeID, createdByID, modifiedBy) VALUES(?, ?, ?, ?, ?)")) {
         $stmt->bind_param('ssiii',$truckName, $regNumb, $truckTruckTypeID, $user_id, $user_id);
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
@@ -1354,7 +1354,7 @@ function setTruck($truckID, $truckName, $regNumb, $truckTruckTypeID, $mysqli) {
 			}
 		}	
 	} else {
-		if ($stmt = $mysqli->prepare("UPDATE Truck SET truckName = ?, regNumb = ?, truckTypeID = ?, modifiedBy = ? WHERE truckID = ?")) {
+		if ($stmt = $mysqli->prepare("UPDATE truck SET truckName = ?, regNumb = ?, truckTypeID = ?, modifiedBy = ? WHERE truckID = ?")) {
         $stmt->bind_param('ssiii',$truckName, $regNumb, $truckTruckTypeID, $user_id, $truckID);
  
 			// Execute the prepared query. 
@@ -1380,7 +1380,7 @@ function getTruck($mysqli) {
 		return json_encode($response);
 		exit();
 	}
-		$result = $mysqli->query("SELECT T0.truckID, T0.truckName, T0.regNumb, T0.truckTypeID, T1.truckTypeName FROM truck T0 INNER JOIN truckType T1 ON T0.truckTypeID = T1.truckTypeID");
+		$result = $mysqli->query("SELECT T0.truckID, T0.truckName, T0.regNumb, T0.truckTypeID, T1.truckTypeName FROM truck T0 INNER JOIN trucktype T1 ON T0.truckTypeID = T1.truckTypeID");
 
 		//use mysqli->affected_rows
 		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
@@ -1403,7 +1403,7 @@ function getTruckByID($truckID,$mysqli) {
 		exit();
 	}
 		$result = $mysqli->query("SELECT T0.truckID, T0.truckName, T0.regNumb, T0.truckTypeID, T1.truckTypeName 
-									FROM truck T0 INNER JOIN truckType T1 ON T0.truckTypeID = T1.truckTypeID 
+									FROM truck T0 INNER JOIN trucktype T1 ON T0.truckTypeID = T1.truckTypeID 
 									WHERE truckID = $truckID ");
 
 		//use mysqli->affected_rows
@@ -1457,7 +1457,7 @@ function setUserGroup($userGroupID, $userGroupName, $userGroupDescription, $user
 	}
 	
 	if ($userGroupID == 0) {
-		if ($stmt = $mysqli->prepare("INSERT INTO UserGroups (userGroupName, userGroupDescription, userGroupCode, createdByID, modifiedByID) VALUES(?, ?, ?, ?, ?)")) {
+		if ($stmt = $mysqli->prepare("INSERT INTO usergroups (userGroupName, userGroupDescription, userGroupCode, createdByID, modifiedByID) VALUES(?, ?, ?, ?, ?)")) {
         $stmt->bind_param('sssii',$userGroupName, $userGroupDescription, $userGroupCode, $user_id, $user_id);
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
@@ -1465,7 +1465,7 @@ function setUserGroup($userGroupID, $userGroupName, $userGroupDescription, $user
 			}
 		}	
 	} else {
-		if ($stmt = $mysqli->prepare("UPDATE UserGroups SET userGroupName = ?, userGroupDescription = ?, userGroupCode = ?, modifiedByID = ? WHERE userGroupID = ?")) {
+		if ($stmt = $mysqli->prepare("UPDATE usergroups SET userGroupName = ?, userGroupDescription = ?, userGroupCode = ?, modifiedByID = ? WHERE userGroupID = ?")) {
         $stmt->bind_param('sssii',$userGroupName, $userGroupDescription, $userGroupCode, $user_id, $userGroupID);
  
 			// Execute the prepared query. 
@@ -1491,7 +1491,7 @@ function getUserGroup($mysqli) {
 		return json_encode($response);
 		exit();
 	}
-		$result = $mysqli->query("SELECT userGroupID, userGroupName, userGroupDescription, userGroupCode, dateCreated, createdByID, dateModified, modifiedByID FROM UserGroups");
+		$result = $mysqli->query("SELECT userGroupID, userGroupName, userGroupDescription, userGroupCode, dateCreated, createdByID, dateModified, modifiedByID FROM usergroups");
 
 		//use mysqli->affected_rows
 		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
@@ -1513,7 +1513,7 @@ function getUserGroupByID($userGroupID,$mysqli) {
 		return json_encode($response);
 		exit();
 	}
-		$result = $mysqli->query("SELECT userGroupID, userGroupName, userGroupDescription, userGroupCode, dateCreated, createdByID, dateModified, modifiedByID FROM UserGroups WHERE userGroupID = $userGroupID ");
+		$result = $mysqli->query("SELECT userGroupID, userGroupName, userGroupDescription, userGroupCode, dateCreated, createdByID, dateModified, modifiedByID FROM usergroups WHERE userGroupID = $userGroupID ");
 
 		//use mysqli->affected_rows
 		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
@@ -1541,7 +1541,7 @@ function delUserGroup($userGroupID,$mysqli) {
 	$msg = '';
 	$flag = 0;
 	foreach ($ids as $id) {
-		$result = $mysqli->query("DELETE FROM UserGroups WHERE userGroupID = $id ");
+		$result = $mysqli->query("DELETE FROM usergroups WHERE userGroupID = $id ");
 		if ($result){
 			$msg .= 'Record(s) deleted successfully.,';
 		}
@@ -1566,7 +1566,7 @@ function setMenu($menuID, $menuName, $menuDescription, $menuCode, $menuRanking, 
 	}
 	
 	if ($menuID == 0) {
-		if ($stmt = $mysqli->prepare("INSERT INTO Menus (menuName, menuDesc, menuCode, menuRanking, createdByID, modifiedByID) VALUES(?, ?, ?, ?, ?, ?)")) {
+		if ($stmt = $mysqli->prepare("INSERT INTO menus (menuName, menuDesc, menuCode, menuRanking, createdByID, modifiedByID) VALUES(?, ?, ?, ?, ?, ?)")) {
         $stmt->bind_param('sssiii',$menuName, $menuDescription, $menuCode, $menuRanking, $user_id, $user_id);
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
@@ -1574,7 +1574,7 @@ function setMenu($menuID, $menuName, $menuDescription, $menuCode, $menuRanking, 
 			}
 		}	
 	} else {
-		if ($stmt = $mysqli->prepare("UPDATE Menus SET menuName = ?, menuDesc = ?, menuCode = ?, menuRanking = ?, modifiedByID = ? WHERE menuID = ?")) {
+		if ($stmt = $mysqli->prepare("UPDATE menus SET menuName = ?, menuDesc = ?, menuCode = ?, menuRanking = ?, modifiedByID = ? WHERE menuID = ?")) {
         $stmt->bind_param('sssiii',$menuName, $menuDescription, $menuCode, $menuRanking, $user_id, $menuID);
  
 			// Execute the prepared query. 
@@ -1600,7 +1600,7 @@ function getMenu($mysqli) {
 		return json_encode($response);
 		exit();
 	}
-		$result = $mysqli->query("SELECT menuID, menuName, menuDesc, menuCode, menuRanking, dateCreated, createdByID, dateModified, modifiedByID FROM Menus");
+		$result = $mysqli->query("SELECT menuID, menuName, menuDesc, menuCode, menuRanking, dateCreated, createdByID, dateModified, modifiedByID FROM menus");
 
 		//use mysqli->affected_rows
 		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
@@ -1622,7 +1622,7 @@ function getMenuByID($MenuID,$mysqli) {
 		return json_encode($response);
 		exit();
 	}
-		$result = $mysqli->query("SELECT menuID, menuName, menuDesc, menuCode, menuRanking, dateCreated, createdByID, dateModified, modifiedByID FROM Menus WHERE menuID = $menuID ");
+		$result = $mysqli->query("SELECT menuID, menuName, menuDesc, menuCode, menuRanking, dateCreated, createdByID, dateModified, modifiedByID FROM menus WHERE menuID = $menuID ");
 
 		//use mysqli->affected_rows
 		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
@@ -1650,7 +1650,7 @@ function delMenu($MenuID,$mysqli) {
 	$msg = '';
 	$flag = 0;
 	foreach ($ids as $id) {
-		$result = $mysqli->query("DELETE FROM Menus WHERE menuID = $id ");
+		$result = $mysqli->query("DELETE FROM menus WHERE menuID = $id ");
 		if ($result){
 			$msg .= 'Record(s) deleted successfully.,';
 		}
@@ -1675,7 +1675,7 @@ function setMenuItem($menuItemID, $menuMenuID, $menuItemName, $menuItemDescripti
 	}
 	
 	if ($menuItemID == 0) {
-		if ($stmt = $mysqli->prepare("INSERT INTO MenuItems (menuID, menuItemName, menuItemDescription, menuItemCode, menuItemRanking, createdByID, modifiedByID) VALUES(?, ?, ?, ?, ?, ?, ?)")) {
+		if ($stmt = $mysqli->prepare("INSERT INTO menuitems (menuID, menuItemName, menuItemDescription, menuItemCode, menuItemRanking, createdByID, modifiedByID) VALUES(?, ?, ?, ?, ?, ?, ?)")) {
         $stmt->bind_param('isssiii',$menuMenuID, $menuItemName, $menuItemDescription, $menuItemCode, $menuItemRanking, $user_id, $user_id);
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
@@ -1683,7 +1683,7 @@ function setMenuItem($menuItemID, $menuMenuID, $menuItemName, $menuItemDescripti
 			}
 		}	
 	} else {
-		if ($stmt = $mysqli->prepare("UPDATE MenuItems SET menuID = ?, menuItemName = ?, menuItemDescription = ?, menuItemCode = ?, menuItemRanking = ?, modifiedByID = ? WHERE menuItemID = ?")) {
+		if ($stmt = $mysqli->prepare("UPDATE menuitems SET menuID = ?, menuItemName = ?, menuItemDescription = ?, menuItemCode = ?, menuItemRanking = ?, modifiedByID = ? WHERE menuItemID = ?")) {
         $stmt->bind_param('isssiii',$menuMenuID, $menuItemName, $menuItemDescription, $menuItemCode, $menuItemRanking, $user_id, $menuItemID);
  
 			// Execute the prepared query. 
@@ -1709,7 +1709,7 @@ function getMenuItem($mysqli) {
 		return json_encode($response);
 		exit();
 	}
-		$result = $mysqli->query("SELECT T0.menuItemID, T1.menuName, T0.menuItemName, T0.menuItemDescription, T0.menuItemCode, T0.menuItemRanking, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM MenuItems T0 INNER JOIN Menus T1 ON T1.menuID = T0.menuID ORDER BY T1.menuName ASC");
+		$result = $mysqli->query("SELECT T0.menuItemID, T1.menuName, T0.menuItemName, T0.menuItemDescription, T0.menuItemCode, T0.menuItemRanking, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM menuitems T0 INNER JOIN menus T1 ON T1.menuID = T0.menuID ORDER BY T1.menuName ASC");
 
 		//use mysqli->affected_rows
 		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
@@ -1731,7 +1731,7 @@ function getMenuItemByID($menuItemID,$mysqli) {
 		return json_encode($response);
 		exit();
 	}
-		$result = $mysqli->query("SELECT T0.menuItemID, T1.menuID, T0.menuItemName, T0.menuItemDescription, T0.menuItemCode, T0.menuItemRanking, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM MenuItems T0 INNER JOIN Menus T1 ON T1.menuID = T0.menuID WHERE T0.menuItemID = $menuItemID ");
+		$result = $mysqli->query("SELECT T0.menuItemID, T1.menuID, T0.menuItemName, T0.menuItemDescription, T0.menuItemCode, T0.menuItemRanking, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM menuitems T0 INNER JOIN menus T1 ON T1.menuID = T0.menuID WHERE T0.menuItemID = $menuItemID ");
 
 		//use mysqli->affected_rows
 		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
@@ -1754,7 +1754,7 @@ function getMenuItemByIDDropDown($menuMenuID,$mysqli) {
 		return json_encode($response);
 		exit();
 	}
-		$result = $mysqli->query("SELECT T0.menuItemID, T1.menuID, T1.menuName, T0.menuItemName, T0.menuItemDescription, T0.menuItemCode, T0.menuItemRanking, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM MenuItems T0 INNER JOIN Menus T1 ON T1.menuID = T0.menuID WHERE T1.menuID = $menuMenuID ");
+		$result = $mysqli->query("SELECT T0.menuItemID, T1.menuID, T1.menuName, T0.menuItemName, T0.menuItemDescription, T0.menuItemCode, T0.menuItemRanking, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM menuitems T0 INNER JOIN menus T1 ON T1.menuID = T0.menuID WHERE T1.menuID = $menuMenuID ");
 
 		//use mysqli->affected_rows
 		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
@@ -1782,7 +1782,7 @@ function delMenuItem($menuItemID,$mysqli) {
 	$msg = '';
 	$flag = 0;
 	foreach ($ids as $id) {
-		$result = $mysqli->query("DELETE FROM MenuItems WHERE menuItemID = $id ");
+		$result = $mysqli->query("DELETE FROM menuitems WHERE menuItemID = $id ");
 		if ($result){
 			$msg .= 'Record(s) deleted successfully.,';
 		}
@@ -1807,7 +1807,7 @@ function setForm($formID, $menuItemMenuID, $formName, $formDescription, $formCod
 	}
 	
 	if ($formID == 0) {
-		if ($stmt = $mysqli->prepare("INSERT INTO Forms (menuItemID, formName, formDescription, formCode, createdByID, modifiedByID) VALUES(?, ?, ?, ?, ?, ?)")) {
+		if ($stmt = $mysqli->prepare("INSERT INTO forms (menuItemID, formName, formDescription, formCode, createdByID, modifiedByID) VALUES(?, ?, ?, ?, ?, ?)")) {
         $stmt->bind_param('isssii',$menuItemMenuID, $formName, $formDescription, $formCode, $user_id, $user_id);
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
@@ -1815,7 +1815,7 @@ function setForm($formID, $menuItemMenuID, $formName, $formDescription, $formCod
 			}
 		}	
 	} else {
-		if ($stmt = $mysqli->prepare("UPDATE Forms SET menuItemID = ?, formName = ?, formDescription = ?, formCode = ?, modifiedByID = ? WHERE formID = ?")) {
+		if ($stmt = $mysqli->prepare("UPDATE forms SET menuItemID = ?, formName = ?, formDescription = ?, formCode = ?, modifiedByID = ? WHERE formID = ?")) {
         $stmt->bind_param('isssii',$menuItemMenuID, $formName, $formDescription, $formCode, $user_id, $formID);
  
 			// Execute the prepared query. 
@@ -1841,7 +1841,7 @@ function getForm($mysqli) {
 		return json_encode($response);
 		exit();
 	}
-		$result = $mysqli->query("SELECT T0.formID, T1.menuItemName, T0.formName, T0.formDescription, T0.formCode, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM Forms T0 INNER JOIN MenuItems T1 ON T1.menuItemID = T0.menuItemID ORDER BY T1.menuItemName ASC");
+		$result = $mysqli->query("SELECT T0.formID, T1.menuItemName, T0.formName, T0.formDescription, T0.formCode, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM forms T0 INNER JOIN menuitems T1 ON T1.menuItemID = T0.menuItemID ORDER BY T1.menuItemName ASC");
 
 		//use mysqli->affected_rows
 		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
@@ -1863,7 +1863,7 @@ function getFormByID($formID,$mysqli) {
 		return json_encode($response);
 		exit();
 	}
-		$result = $mysqli->query("SELECT T0.formID, T1.menuItemID, T0.formName, T0.formDescription, T0.formCode, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM Forms T0 INNER JOIN MenuItems T1 ON T1.menuItemID = T0.menuItemID WHERE T0.formID = $formID ");
+		$result = $mysqli->query("SELECT T0.formID, T1.menuItemID, T0.formName, T0.formDescription, T0.formCode, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM forms T0 INNER JOIN menuitems T1 ON T1.menuItemID = T0.menuItemID WHERE T0.formID = $formID ");
 
 		//use mysqli->affected_rows
 		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
@@ -1891,7 +1891,7 @@ function delForm($formID,$mysqli) {
 	$msg = '';
 	$flag = 0;
 	foreach ($ids as $id) {
-		$result = $mysqli->query("DELETE FROM Forms WHERE formID = $id ");
+		$result = $mysqli->query("DELETE FROM forms WHERE formID = $id ");
 		if ($result){
 			$msg .= 'Record(s) deleted successfully.,';
 		}

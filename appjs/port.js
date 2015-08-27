@@ -28,7 +28,7 @@ if (portLocationID == '0' || portLocationID == '') {
 
 $.ajax({
 type: "POST",
-url: 'includes/functioncall.php',
+url: 'includes/db_connect_functioncall.php',
 dataType: 'json',
 data: {functionname: 'setPort', portID: portID, portName: portName, portLocationID: portLocationID},
 success: function(obj,textstatus){
@@ -57,7 +57,7 @@ function getPort() {
 	//alert('1');
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getPort'},
 	success: function(obj,textstatus){
@@ -88,7 +88,7 @@ function editPort(id) {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getPortByID', portID: portID},
 	success: function(obj,textstatus){
@@ -135,7 +135,7 @@ function deleteSelectedPort() {
 					
 		$.ajax({
 		type: "POST",
-		url: 'includes/functioncall.php',
+		url: 'includes/db_connect_functioncall.php',
 		dataType: 'json',
 		data: {functionname: 'delPort', portID: sel_IDs},
 		success: function(obj,textstatus){

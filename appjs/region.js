@@ -18,7 +18,7 @@ if (regionName == '') {
 
 $.ajax({
 type: "POST",
-url: 'includes/functioncall.php',
+url: 'includes/db_connect_functioncall.php',
 dataType: 'json',
 data: {functionname: 'setRegion', regionID: regionID, regionName: regionName},
 success: function(obj,textstatus){
@@ -46,7 +46,7 @@ function getRegion() {
 	//alert('1');
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getRegion'},
 	success: function(obj,textstatus){
@@ -76,7 +76,7 @@ function editRegion(id) {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getRegionByID', regionID: regionID},
 	success: function(obj,textstatus){
@@ -121,7 +121,7 @@ function deleteSelectedRegion() {
 					
 		$.ajax({
 		type: "POST",
-		url: 'includes/functioncall.php',
+		url: 'includes/db_connect_functioncall.php',
 		dataType: 'json',
 		data: {functionname: 'delRegion', regionID: sel_IDs},
 		success: function(obj,textstatus){

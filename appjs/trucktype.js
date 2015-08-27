@@ -18,7 +18,7 @@ if (truckTypeName == '') {
 
 $.ajax({
 type: "POST",
-url: 'includes/functioncall.php',
+url: 'includes/db_connect_functioncall.php',
 dataType: 'json',
 data: {functionname: 'setTruckType', truckTypeID: truckTypeID, truckTypeName: truckTypeName},
 success: function(obj,textstatus){
@@ -45,7 +45,7 @@ success: function(obj,textstatus){
 function getTruckType() {
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getTruckType'},
 	success: function(obj,textstatus){
@@ -74,7 +74,7 @@ function editTruckType(id) {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getTruckTypeByID', truckTypeID: truckTypeID},
 	success: function(obj,textstatus){
@@ -119,7 +119,7 @@ function deleteSelectedTruckType() {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'delTruckType', truckTypeID: sel_IDs},
 	success: function(obj,textstatus){

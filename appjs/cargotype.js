@@ -18,7 +18,7 @@ if (cargoTypeName == '') {
 
 $.ajax({
 type: "POST",
-url: 'includes/functioncall.php',
+url: 'includes/db_connect_functioncall.php',
 dataType: 'json',
 data: {functionname: 'setCargoType', cargoTypeID: cargoTypeID, cargoTypeName: cargoTypeName},
 success: function(obj,textstatus){
@@ -45,12 +45,12 @@ success: function(obj,textstatus){
 function getCargoType() {
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getCargoType'},
 	success: function(obj,textstatus){
 				
-				console.log(obj);
+				//console.log(obj);
 		var cls = 'selClsCargoType';
 		var tbl = '<table class="table table-bordered datatable" id="tblCargoType"> <thead> ' +
 		'<tr> <th style="width: 25px;"><input type="checkbox" value="" id="chkAllCargoTypeType" onchange="checkAll(this,\'selClsCargoType\'); countCargoTypeCheckedBox();" /></th> ' +
@@ -74,7 +74,7 @@ function editCargoType(id) {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getCargoTypeByID', cargoTypeID: cargoTypeID},
 	success: function(obj,textstatus){
@@ -119,7 +119,7 @@ function deleteSelectedCargoType() {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'delCargoType', cargoTypeID: sel_IDs},
 	success: function(obj,textstatus){
@@ -140,12 +140,10 @@ function deleteSelectedCargoType() {
 	return false;
 }
 
- 
  function clearCargoValues() {
 
     $('#cargoTypeID').val('0');
 	$('#cargoTypeName').val('');
 	$('#btnAddCargoRecord').text('Save');
 		
-
 }

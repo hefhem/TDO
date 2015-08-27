@@ -39,7 +39,7 @@ if (formCode == '') {
      
 $.ajax({
 type: "POST",
-url: 'includes/functioncall.php',
+url: 'includes/db_connect_functioncall.php',
 dataType: 'json',
 data: {functionname: 'setForm', formID: formID, menuItemMenuID: menuItemMenuID, formName: formName, formDescription: formDescription, formCode: formCode},
 success: function(obj,textstatus){
@@ -67,7 +67,7 @@ function getForm() {
     //alert('am here');
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getForm'},
 	success: function(obj,textstatus){
@@ -96,7 +96,7 @@ function editForm(id) {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getFormByID', formID: formID},
 	success: function(obj,textstatus){
@@ -143,7 +143,7 @@ function deleteSelectedForm() {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'delForm', formID: sel_IDs},
 	success: function(obj,textstatus){

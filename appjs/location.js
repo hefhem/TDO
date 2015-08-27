@@ -28,7 +28,7 @@ if (locationRegionID == '0' || locationRegionID == '') {
 
 $.ajax({
 type: "POST",
-url: 'includes/functioncall.php',
+url: 'includes/db_connect_functioncall.php',
 dataType: 'json',
 data: {functionname: 'setLocation', locationID: locationID, locationName: locationName, locationRegionID: locationRegionID},
 success: function(obj,textstatus){
@@ -57,7 +57,7 @@ function getLocation() {
 	//alert('1');
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getLocation'},
 	success: function(obj,textstatus){
@@ -88,7 +88,7 @@ function editLocation(id) {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getLocationByID', locationID: locationID},
 	success: function(obj,textstatus){
@@ -135,7 +135,7 @@ function deleteSelectedLocation() {
 					
 		$.ajax({
 		type: "POST",
-		url: 'includes/functioncall.php',
+		url: 'includes/db_connect_functioncall.php',
 		dataType: 'json',
 		data: {functionname: 'delLocation', locationID: sel_IDs},
 		success: function(obj,textstatus){

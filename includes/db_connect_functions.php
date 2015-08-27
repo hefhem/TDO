@@ -218,7 +218,7 @@ function getStateDropDown() {
 	$mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
 	$response = array();
 	
-		$result = $mysqli->query("SELECT stateID, stateName, stateCode FROM state");
+		$result = $mysqli->query("SELECT stateID, stateName, stateCode FROM state ORDER BY stateName ASC");
 		//$response = mysqli_fetch_assoc($result);
 
 	return $result;
@@ -227,7 +227,7 @@ function getRegionDropDown() {
 	$mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
 	$response = array();
 	
-		$result = $mysqli->query("CALL getRegion");
+		$result = $mysqli->query("SELECT regionID, regionName FROM region");
 
 	return $result;
 }
@@ -298,7 +298,7 @@ function getMenuDropDown() {
 	$mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
 	$response = array();
 
-		$result = $mysqli->query("SELECT menuID, menuName FROM Menus");
+		$result = $mysqli->query("SELECT menuID, menuName FROM menus");
 		//$response = mysqli_fetch_assoc($result);
 
 	return $result;
@@ -307,7 +307,7 @@ function getMenuItemDropDown() {
 	$mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
 	$response = array();
 
-		$result = $mysqli->query("SELECT menuItemID, menuItemName FROM MenuItems");
+		$result = $mysqli->query("SELECT menuItemID, menuItemName FROM menuitems");
 		//$response = mysqli_fetch_assoc($result);
 
 	return $result;

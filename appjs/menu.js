@@ -45,7 +45,7 @@ if (menuRanking <= 0) {
 
 $.ajax({
 type: "POST",
-url: 'includes/functioncall.php',
+url: 'includes/db_connect_functioncall.php',
 dataType: 'json',
 data: {functionname: 'setMenu', menuID: menuID, menuName: menuName, menuDescription: menuDescription, menuCode: menuCode, menuRanking: menuRanking},
 success: function(obj,textstatus){
@@ -73,7 +73,7 @@ function getMenu() {
     //alert('am here');
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getMenu'},
 	success: function(obj,textstatus){
@@ -102,7 +102,7 @@ function editMenu(id) {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getMenuByID', menuID: menuID},
 	success: function(obj,textstatus){
@@ -149,7 +149,7 @@ function deleteSelectedMenu() {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'delMenu', menuID: sel_IDs},
 	success: function(obj,textstatus){

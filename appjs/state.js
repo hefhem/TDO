@@ -26,7 +26,7 @@ if (stateCode == '') {
 
 $.ajax({
 type: "POST",
-url: 'includes/functioncall.php',
+url: 'includes/db_connect_functioncall.php',
 dataType: 'json',
 data: {functionname: 'setState', stateID: stateID, stateName: stateName, stateCode: stateCode},
 success: function(obj,textstatus){
@@ -55,7 +55,7 @@ function getState() {
 	//alert('1');
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getState'},
 	success: function(obj,textstatus){
@@ -85,7 +85,7 @@ function editState(id) {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getStateByID', stateID: stateID},
 	success: function(obj,textstatus){
@@ -132,7 +132,7 @@ function deleteSelectedState() {
 					
 		$.ajax({
 		type: "POST",
-		url: 'includes/functioncall.php',
+		url: 'includes/db_connect_functioncall.php',
 		dataType: 'json',
 		data: {functionname: 'delState', stateID: sel_IDs},
 		success: function(obj,textstatus){

@@ -52,7 +52,7 @@ if (menuItemRanking <= 0) {
      
 $.ajax({
 type: "POST",
-url: 'includes/functioncall.php',
+url: 'includes/db_connect_functioncall.php',
 dataType: 'json',
 data: {functionname: 'setMenuItem', menuItemID: menuItemID, menuMenuID: menuMenuID, menuItemName: menuItemName, menuItemDescription: menuItemDescription, menuItemCode: menuItemCode, menuItemRanking: menuItemRanking},
 success: function(obj,textstatus){
@@ -83,9 +83,9 @@ function getMenuItem() {
     
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
-	data: {functionname: 'getMenuItemByIDDropDown', menuMenuID: menuMenuID},
+	data: {functionname: 'getMenuItem', menuMenuID: menuMenuID},
 	success: function(obj,textstatus){
 				
 				console.log(obj);
@@ -112,7 +112,7 @@ function editMenuItem(id) {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getMenuItemByID', menuItemID: menuItemID},
 	success: function(obj,textstatus){
@@ -160,7 +160,7 @@ function deleteSelectedMenuItem() {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'delMenuItem', menuItemID: sel_IDs},
 	success: function(obj,textstatus){

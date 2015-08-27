@@ -1,7 +1,7 @@
 
 <?php
 include_once 'includes/register.inc.php';
-include_once 'includes/functions.php';
+include_once 'includes/db_connect_functions.php';
 
 sec_session_start();
  

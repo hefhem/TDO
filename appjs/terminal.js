@@ -28,7 +28,7 @@ if (terminalPortID == '0' || terminalPortID == '') {
 
 $.ajax({
 type: "POST",
-url: 'includes/functioncall.php',
+url: 'includes/db_connect_functioncall.php',
 dataType: 'json',
 data: {functionname: 'setTerminal', terminalID: terminalID, terminalName: terminalName, terminalPortID: terminalPortID},
 success: function(obj,textstatus){
@@ -57,7 +57,7 @@ function getTerminal() {
 	//alert('1');
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getTerminal'},
 	success: function(obj,textstatus){
@@ -88,7 +88,7 @@ function editTerminal(id) {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getTerminalByID', terminalID: terminalID},
 	success: function(obj,textstatus){
@@ -135,7 +135,7 @@ function deleteSelectedTerminal() {
 					
 		$.ajax({
 		type: "POST",
-		url: 'includes/functioncall.php',
+		url: 'includes/db_connect_functioncall.php',
 		dataType: 'json',
 		data: {functionname: 'delTerminal', terminalID: sel_IDs},
 		success: function(obj,textstatus){

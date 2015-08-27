@@ -9,13 +9,14 @@ if (login_check($mysqli) == false) {
 }
 ?>
 
+				
 				<div class="content-wrap">
 
                     <!-- inner content wrapper -->
 				   <div class="wrapper">
 				   
 					   <div class="panel-heading">
-							<h3 class="text-uppercase no-m"><b>SetUp</b></h3>
+							<h3 class="text-uppercase no-m"><b>Setup</b></h3>
 							<br/>
 					   </div>
 					   
@@ -44,7 +45,6 @@ if (login_check($mysqli) == false) {
 											</li>
 											<li class=""><a href="#Truck" data-toggle="tab">Truck</a>
 											</li>
-											
 										</ul>
 										<div class="tab-content">
 											<div class="tab-pane fade active in" id="CargoType">
@@ -290,6 +290,7 @@ if (login_check($mysqli) == false) {
 														<div>
 															<input type="hidden" class="form-control" name="regionID" id="regionID" value="0">
 															<input type="text" class="form-control" name="regionName" id="regionName" placeholder="Description">
+															<input type="hidden" class="form-control" name="functionname" id="functionname" value="setRegion">
 														</div>
 													</div>
 												</div>												
@@ -305,7 +306,7 @@ if (login_check($mysqli) == false) {
 							</div>
 						</div>
                        
-                       <!-- State Modal -->
+						<!-- State Modal -->
 					   <div class="modal fade bs-modal-sm" id="stateModal" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
@@ -322,6 +323,7 @@ if (login_check($mysqli) == false) {
 														<div>
 															<input type="hidden" class="form-control" name="stateID" id="stateID" value="0">
 															<input type="text" class="form-control" name="stateName" id="stateName" placeholder="State Name">
+															<input type="hidden" class="form-control" name="functionname" id="functionname" value="setState">
 														</div>
 														<label>State Code</label>
 														<div>
@@ -341,7 +343,7 @@ if (login_check($mysqli) == false) {
 							</div>
 						</div>
                        
-                       <!-- City Modal -->
+						 <!-- City Modal -->
 					    <div class="modal fade bs-modal-sm" id="cityModal" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
@@ -358,6 +360,7 @@ if (login_check($mysqli) == false) {
 														<div>
 															<input type="hidden" class="form-control" name="cityID" id="cityID" value="0">
 															<input type="text" class="form-control" name="cityName" id="cityName" placeholder="City Name">
+															<input type="hidden" class="form-control" name="functionname" id="functionname" value="setCity">
 														</div>
 														<label>City Code</label>
 														<div>
@@ -391,8 +394,8 @@ if (login_check($mysqli) == false) {
 								</div>
 							</div>
 						</div>
-                       
-                        <!-- Location Modal -->
+						
+						  <!-- Location Modal -->
 					    <div class="modal fade bs-modal-sm" id="locationModal" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
@@ -409,6 +412,7 @@ if (login_check($mysqli) == false) {
 														<div>
 															<input type="hidden" class="form-control" name="locationID" id="locationID" value="0">
 															<input type="text" class="form-control" name="locationName" id="locationName" placeholder="location Name">
+															<input type="hidden" class="form-control" name="functionname" id="functionname" value="setLocation">
 														</div>
 														<label>Region</label>
 														<div>
@@ -438,7 +442,7 @@ if (login_check($mysqli) == false) {
 							</div>
 						</div>
                        
-                        <!-- Port Modal -->
+				        <!-- Port Modal -->
 					    <div class="modal fade bs-modal-sm" id="portModal" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
@@ -486,7 +490,7 @@ if (login_check($mysqli) == false) {
 							</div>
 						</div>
                        
-                          <!-- Terminal Modal -->
+						    <!-- Terminal Modal -->
 					    <div class="modal fade bs-modal-sm" id="terminalModal" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
@@ -534,7 +538,7 @@ if (login_check($mysqli) == false) {
 							</div>
 						</div>
                        
-                        <!-- Truck Modal -->
+						   <!-- Truck Modal -->
 					    <div class="modal fade bs-modal-sm" id="truckModal" tabindex="-1" role="dialog" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
@@ -585,20 +589,22 @@ if (login_check($mysqli) == false) {
 								</div>
 							</div>
 						</div>
-                       
+						
+
 				   </div>
+					<!-- /inner content wrapper -->
 
                 </div>
-				<script src="appjs/cargotype.js?86"></script>
+				<script src="appjs/cargotype.js"></script>
                 <script src="appjs/trucktype.js"></script>
-                <script src="appjs/driver.js"></script>
-                <script src="appjs/region.js"></script>
-                <script src="appjs/state.js"></script>
-                <script src="appjs/city.js"></script>
-                <script src="appjs/location.js"></script>
-                <script src="appjs/port.js"></script>
-                <script src="appjs/terminal.js"></script>
-                <script src="appjs/truck.js"></script>
+                <!--<script src="appjs/driver.js"></script>
+				<script src="appjs/region.js"></script>
+				<script src="appjs/state.js"></script>
+				<script src="appjs/city.js"></script>
+				<script src="appjs/location.js"></script>
+				<script src="appjs/port.js"></script>
+				<script src="appjs/terminal.js"></script>
+				<script src="appjs/truck.js"></script>-->
 				<script>
 				
 				function checkAll(ele,cls) {

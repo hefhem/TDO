@@ -34,7 +34,7 @@ if (driverLastName == '') {
 
 $.ajax({
 type: "POST",
-url: 'includes/functioncall.php',
+url: 'includes/db_connect_functioncall.php',
 dataType: 'json',
 data: {functionname: 'setDriver', driverID: driverID, driverCode: driverCode, driverFirstName: driverFirstName, driverMiddleName: driverMiddleName, driverLastName: driverLastName},
 success: function(obj,textstatus){
@@ -61,7 +61,7 @@ success: function(obj,textstatus){
 function getDriver() {
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getDriver'},
 	success: function(obj,textstatus){
@@ -96,7 +96,7 @@ function editDriver(id) {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getDriverByID', driverID: driverID},
 	success: function(obj,textstatus){
@@ -139,7 +139,7 @@ function deleteSelectedDriver() {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'delDriver', driverID: sel_IDs},
 	success: function(obj,textstatus){

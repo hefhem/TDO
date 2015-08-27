@@ -33,7 +33,7 @@ if (cityStateID == '0' || cityStateID == '') {
 
 $.ajax({
 type: "POST",
-url: 'includes/functioncall.php',
+url: 'includes/db_connect_functioncall.php',
 dataType: 'json',
 data: {functionname: 'setCity', cityID: cityID, cityName: cityName, cityCode: cityCode, cityStateID: cityStateID},
 success: function(obj,textstatus){
@@ -62,7 +62,7 @@ function getCity() {
 	//alert('1');
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getCity'},
 	success: function(obj,textstatus){
@@ -93,7 +93,7 @@ function editCity(id) {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getCityByID', cityID: cityID},
 	success: function(obj,textstatus){
@@ -142,7 +142,7 @@ function deleteSelectedCity() {
 					
 		$.ajax({
 		type: "POST",
-		url: 'includes/functioncall.php',
+		url: 'includes/db_connect_functioncall.php',
 		dataType: 'json',
 		data: {functionname: 'delCity', cityID: sel_IDs},
 		success: function(obj,textstatus){
@@ -178,7 +178,7 @@ function getListState() {
 	//alert('1');
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getState'},
 	success: function(obj,textstatus){

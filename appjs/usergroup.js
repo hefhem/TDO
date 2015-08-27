@@ -32,7 +32,7 @@ if (userGroupCode == '') {
 
 $.ajax({
 type: "POST",
-url: 'includes/functioncall.php',
+url: 'includes/db_connect_functioncall.php',
 dataType: 'json',
 data: {functionname: 'setUserGroup', userGroupID: userGroupID, userGroupName: userGroupName, userGroupDescription: userGroupDescription, userGroupCode: userGroupCode},
 success: function(obj,textstatus){
@@ -60,7 +60,7 @@ function getUserGroup() {
     //alert('am here');
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getUserGroup'},
 	success: function(obj,textstatus){
@@ -89,7 +89,7 @@ function editUserGroup(id) {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'getUserGroupByID', userGroupID: userGroupID},
 	success: function(obj,textstatus){
@@ -135,7 +135,7 @@ function deleteSelectedUserGroup() {
 	
 	$.ajax({
 	type: "POST",
-	url: 'includes/functioncall.php',
+	url: 'includes/db_connect_functioncall.php',
 	dataType: 'json',
 	data: {functionname: 'delUserGroup', userGroupID: sel_IDs},
 	success: function(obj,textstatus){
