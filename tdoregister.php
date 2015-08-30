@@ -168,7 +168,7 @@ if (login_check($mysqli) == false) {
                                 <div class="col-sm-7">
                                     <?php 
 										$result = getStateDropDown(); 
-										echo '<select class="form-control" id="stateID" name="stateID">';
+										echo '<select class="form-control" id="stateID" name="stateID" onchange="getCityByStateID();">';
 										echo '<option value="0">Select State</option>';
 											while ($staterow = mysqli_fetch_assoc($result)) {
 											   echo '<option value="'.$staterow['stateID'].'">'.$staterow['stateName'].'</option>';
@@ -254,3 +254,4 @@ if (login_check($mysqli) == false) {
     <!-- /inner content wrapper -->
 
 </div>
+<script src="appjs/tdoregister.js"></script>

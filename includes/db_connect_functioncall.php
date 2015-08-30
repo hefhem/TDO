@@ -132,6 +132,10 @@ include_once 'db_connect_functions.php';
 		$cityID = $_POST["cityID"];		
 		delCity($cityID, $mysqli);
 	}
+	if ($functionname == 'getCityByStateID'){
+		$stateID = $_POST["stateID"];		
+		getCityByStateID($stateID, $mysqli);
+	}
 	
 	/*Location*/
 	if ($functionname == 'setLocation'){
@@ -1170,6 +1174,30 @@ function getCityByID($cityID,$mysqli) {
 	}
 		$result = $mysqli->query("SELECT T0.cityID, T0.cityName, T0.cityCode, T0.stateID, T1.stateName FROM city T0 
 									INNER JOIN state T1 ON T0.stateID = T1.stateID WHERE cityID = $cityID ");
+
+		//use mysqli->affected_rows
+		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
+			$rows[] = $result->fetch_assoc();
+		}
+	
+    
+	echo json_encode($rows);
+}
+
+function getCityByStateID($stateID,$mysqli) {
+	
+	$response = array();
+	$user_id = 	$_SESSION['user_id'];
+	
+	
+	if (!$mysqli){
+
+		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
+		echo json_encode($response);
+		exit();
+	}
+		$result = $mysqli->query("SELECT T0.cityID, T0.cityName, T0.cityCode, T0.stateID, T1.stateName FROM city T0 
+									INNER JOIN state T1 ON T0.stateID = T1.stateID WHERE T1.stateID = $stateID ");
 
 		//use mysqli->affected_rows
 		for ($x = 1; $x <= $mysqli->affected_rows; $x++) {
