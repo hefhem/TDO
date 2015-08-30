@@ -32,8 +32,8 @@ success: function(obj,textstatus){
 					getRegion();
 				}
 				else {
-					alertMsg(obj.msg,'danger');
-					//alertMsgGritter('Error',obj.msg,'danger')
+					alertMsg(obj.msg,'error');
+					//alertMsgGritter('Error',obj.msg,'error')
 				}
 			}
 });
@@ -133,8 +133,8 @@ function deleteSelectedRegion() {
 							getRegion();
 						}
 						else {
-							alertMsg(obj.msg,'danger');
-							//alertMsgGritter('Error',obj.msg,'danger')
+							alertMsg(obj.msg,'error');
+							//alertMsgGritter('Error',obj.msg,'error')
 						}
 					}
 		});

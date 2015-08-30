@@ -59,8 +59,8 @@ success: function(obj,textstatus){
 					getMenu();
 				}
 				else {
-					alertMsg(obj.msg,'danger');
-					//alertMsgGritter('Error',obj.msg,'danger')
+					alertMsg(obj.msg,'error');
+					//alertMsgGritter('Error',obj.msg,'error')
 				}
 			}
 });
@@ -161,8 +161,8 @@ function deleteSelectedMenu() {
 						getMenu();
 					}
 					else {
-						alertMsg(obj.msg,'danger');
-						//alertMsgGritter('Error',obj.msg,'danger')
+						alertMsg(obj.msg,'error');
+						//alertMsgGritter('Error',obj.msg,'error')
 					}
 				}
 	});

@@ -22,20 +22,21 @@ url: 'includes/db_connect_functioncall.php',
 dataType: 'json',
 data: {functionname: 'setCargoType', cargoTypeID: cargoTypeID, cargoTypeName: cargoTypeName},
 success: function(obj,textstatus){
-				
-				if (obj.isSuccess == 1) {
-					alertMsg(obj.msg,'success');
-					//alertMsgGritter('Success',obj.msg,'success')
-					if ($('#btnAddCargoRecord').text() == 'Save'){
-						clearCargoValues();
-					}
-					getCargoType();
-				}
-				else {
-					alertMsg(obj.msg,'danger');
-					//alertMsgGritter('Error',obj.msg,'danger')
-				}
+		//alert('called2');
+		//console.log(obj);
+		if (obj.isSuccess == 1) {
+			alertMsg(obj.msg,'success');
+			//alertMsgGritter('Success',obj.msg,'success')
+			if ($('#btnAddCargoRecord').text() == 'Save'){
+				clearCargoValues();
 			}
+			getCargoType();
+		}
+		else {
+			alertMsg(obj.msg,'error');
+			//alertMsgGritter('Error',obj.msg,'danger')
+		}
+	}
 });
 	
  //alert('called finally');

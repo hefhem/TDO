@@ -46,8 +46,8 @@ success: function(obj,textstatus){
 					getUserGroup();
 				}
 				else {
-					alertMsg(obj.msg,'danger');
-					//alertMsgGritter('Error',obj.msg,'danger')
+					alertMsg(obj.msg,'error');
+					//alertMsgGritter('Error',obj.msg,'error')
 				}
 			}
 });
@@ -147,8 +147,8 @@ function deleteSelectedUserGroup() {
 						getUserGroup();
 					}
 					else {
-						alertMsg(obj.msg,'danger');
-						//alertMsgGritter('Error',obj.msg,'danger')
+						alertMsg(obj.msg,'error');
+						//alertMsgGritter('Error',obj.msg,'error')
 					}
 				}
 	});

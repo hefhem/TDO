@@ -48,8 +48,8 @@ success: function(obj,textstatus){
 					getDriver();
 				}
 				else {
-					alertMsg(obj.msg,'danger');
-					//alertMsgGritter('Error',obj.msg,'danger')
+					alertMsg(obj.msg,'error');
+					//alertMsgGritter('Error',obj.msg,'error')
 				}
 			}
 });
@@ -151,8 +151,8 @@ function deleteSelectedDriver() {
 						getDriver();
 					}
 					else {
-						alertMsg(obj.msg,'danger');
-						//alertMsgGritter('Error',obj.msg,'danger')
+						alertMsg(obj.msg,'error');
+						//alertMsgGritter('Error',obj.msg,'error')
 					}
 				}
 	});

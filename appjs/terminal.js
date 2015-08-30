@@ -44,7 +44,7 @@ success: function(obj,textstatus){
 				}
 				else {
 					alertMsg(obj.msg,'error');
-					//alertMsgGritter('Error',obj.msg,'danger')
+					//alertMsgGritter('Error',obj.msg,'error')
 				}
 			}
 });
@@ -147,8 +147,8 @@ function deleteSelectedTerminal() {
 							getTerminal();
 						}
 						else {
-							alertMsg(obj.msg,'danger');
-							//alertMsgGritter('Error',obj.msg,'danger')
+							alertMsg(obj.msg,'error');
+							//alertMsgGritter('Error',obj.msg,'error')
 						}
 					}
 		});

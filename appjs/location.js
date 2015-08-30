@@ -43,8 +43,8 @@ success: function(obj,textstatus){
 					getLocation();
 				}
 				else {
-					alertMsg(obj.msg,'danger');
-					//alertMsgGritter('Error',obj.msg,'danger')
+					alertMsg(obj.msg,'error');
+					//alertMsgGritter('Error',obj.msg,'error')
 				}
 			}
 });
@@ -147,8 +147,8 @@ function deleteSelectedLocation() {
 							getLocation();
 						}
 						else {
-							alertMsg(obj.msg,'danger');
-							//alertMsgGritter('Error',obj.msg,'danger')
+							alertMsg(obj.msg,'error');
+							//alertMsgGritter('Error',obj.msg,'error')
 						}
 					}
 		});

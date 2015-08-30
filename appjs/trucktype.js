@@ -32,8 +32,8 @@ success: function(obj,textstatus){
 					getTruckType();
 				}
 				else {
-					alertMsg(obj.msg,'danger');
-					//alertMsgGritter('Error',obj.msg,'danger')
+					alertMsg(obj.msg,'error');
+					//alertMsgGritter('Error',obj.msg,'error')
 				}
 			}
 });
@@ -131,8 +131,8 @@ function deleteSelectedTruckType() {
 						getTruckType();
 					}
 					else {
-						alertMsg(obj.msg,'danger');
-						//alertMsgGritter('Error',obj.msg,'danger')
+						alertMsg(obj.msg,'error');
+						//alertMsgGritter('Error',obj.msg,'error')
 					}
 				}
 	});

@@ -9,9 +9,9 @@ include_once 'db_connect_functions.php';
 		exit();
 	}
 	//$user_id = 	$_SESSION['user_id'];
-	
-	$functionname = $_POST["functionname"];
-	
+	if (isset($_POST["functionname"])){
+		$functionname = $_POST["functionname"];
+	}
 	/*Cargotype*/
 	if ($functionname == 'setCargoType'){
 		$cargoTypeID = $_POST["cargoTypeID"];
@@ -319,8 +319,43 @@ function setCargoType($cargoTypeID, $cargoTypeName, $mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
+	}
+	
+	//Validation Begins here
+	if ($cargoTypeID == 0) {
+		if ($stmt = $mysqli->prepare("SELECT cargoTypeName 
+										  FROM cargotype 
+										  WHERE cargoTypeName = ? ")) {
+			// Bind "$cargoTypeName" to parameter. 
+			$stmt->bind_param('s', $cargoTypeName);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the Cargotype already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
+	} else if ($cargoTypeID != 0){
+		if ($stmt = $mysqli->prepare("SELECT cargoTypeName 
+										  FROM cargotype 
+										  WHERE cargoTypeName = ? AND cargoTypeID <> ? ")) {
+			// Bind "$cargoTypeName" to parameter. 
+			$stmt->bind_param('si', $cargoTypeName, $cargoTypeID);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the Cargotype already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
 	}
 
 	if ($cargoTypeID == 0) {
@@ -329,6 +364,8 @@ function setCargoType($cargoTypeID, $cargoTypeName, $mysqli) {
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
 				$response = array('isSuccess'=>'1', 'msg'=>'Record inserted successfully.');
+			} else {
+				$response = array('isSuccess'=>'0', 'msg'=>'Error saving record.');
 			}
 		}	
 	} else {
@@ -338,6 +375,8 @@ function setCargoType($cargoTypeID, $cargoTypeName, $mysqli) {
 			// Execute the prepared query. 
 			if ($stmt->execute()) {
 				$response = array('isSuccess'=>'1', 'msg'=>'Record updated successfully.');
+			} else {
+				$response = array('isSuccess'=>'0', 'msg'=>'Error saving record.');
 			}
 		}	
 		
@@ -355,7 +394,7 @@ function getCargoType($mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT cargoTypeID, cargoTypeName, dateCreated, createdByID, dateModified, modifiedBy FROM cargotype");
@@ -384,7 +423,7 @@ function getCargoTypeByID($cargoTypeID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT cargoTypeID, cargoTypeName FROM cargotype WHERE cargoTypeID = $cargoTypeID ");
@@ -415,7 +454,7 @@ function delCargoType($cargoTypeID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 	$msg = '';
@@ -444,8 +483,43 @@ function setTruckType($truckTypeID, $truckTypeName, $mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
+	}
+	
+	//Validation Begins here
+	if ($truckTypeID == 0) {
+		if ($stmt = $mysqli->prepare("SELECT truckTypeName 
+										  FROM trucktype 
+										  WHERE truckTypeName = ? ")) {
+			// Bind "$truckTypeName" to parameter. 
+			$stmt->bind_param('s', $truckTypeName);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the Trucktype already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
+	} else if ($truckTypeID != 0){
+		if ($stmt = $mysqli->prepare("SELECT truckTypeName 
+										  FROM trucktype 
+										  WHERE truckTypeName = ? AND truckTypeID <> ? ")) {
+			// Bind "$truckTypeName" to parameter. 
+			$stmt->bind_param('si', $truckTypeName, $truckTypeID);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the Cargotype already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
 	}
 
 	if ($truckTypeID == 0) {
@@ -480,7 +554,7 @@ function getTruckType($mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT truckTypeID, truckTypeName, dateCreated, createdByID, dateModified, modifiedBy FROM trucktype");
@@ -503,7 +577,7 @@ function getTruckTypeByID($truckTypeID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT truckTypeID, truckTypeName FROM trucktype WHERE truckTypeID = $truckTypeID ");
@@ -534,7 +608,7 @@ function delTruckType($truckTypeID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 	$msg = '';
@@ -563,8 +637,43 @@ function setDriver($driverID, $driverCode, $driverFirstName, $driverMiddleName, 
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
+	}
+	
+	//Validation Begins here
+	if ($driverID == 0) {
+		if ($stmt = $mysqli->prepare("SELECT driverCode 
+										  FROM driver 
+										  WHERE driverCode = ? ")) {
+			// Bind "$driverCode" to parameter. 
+			$stmt->bind_param('s', $driverCode);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the driver already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
+	} else if ($driverID != 0){
+		if ($stmt = $mysqli->prepare("SELECT driverCode 
+										  FROM driver 
+										  WHERE driverCode = ? AND driverID <> ? ")) {
+			// Bind "$driverCode" to parameter. 
+			$stmt->bind_param('si', $driverCode, $driverID);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the driverCode already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
 	}
 
 	if ($driverID == 0) {
@@ -598,7 +707,7 @@ function getDriver($mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT driverID, driverCode, firstName, middleName, lastName, dateCreated, createdByID, dateModified, modifiedBy FROM driver");
@@ -621,7 +730,7 @@ function getDriverByID($driverID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT driverID, driverCode, firstName, middleName, lastName FROM driver WHERE driverID = $driverID");
@@ -646,7 +755,7 @@ function delDriver($driverID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 	$msg = '';
@@ -674,8 +783,42 @@ function setRegion($regionID, $regionName, $mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
+	}
+	
+	if ($regionID == 0) {
+		if ($stmt = $mysqli->prepare("SELECT regionName 
+										  FROM region 
+										  WHERE regionName = ? ")) {
+			// Bind "$regionName" to parameter. 
+			$stmt->bind_param('s', $regionName);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the region already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
+	} else if ($regionID != 0){
+		if ($stmt = $mysqli->prepare("SELECT regionName 
+										  FROM region 
+										  WHERE regionName = ? AND regionID <> ? ")) {
+			// Bind "$regionName" to parameter. 
+			$stmt->bind_param('si', $regionName, $regionID);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the regionName already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
 	}
 
 	if ($regionID == 0) {
@@ -710,7 +853,7 @@ function getRegion($mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT regionID, regionName, dateCreated, createdByID, dateModified, modifiedBy FROM region");
@@ -732,7 +875,7 @@ function getRegionByID($regionID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT regionID, regionName FROM region WHERE regionID = $regionID ");
@@ -757,7 +900,7 @@ function delRegion($regionID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 	$msg = '';
@@ -784,8 +927,43 @@ function setState($stateID, $stateName, $stateCode, $mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
+	}
+	
+	//Validation Begins here
+	if ($stateID == 0) {
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM state 
+										  WHERE stateName = ? or stateCode = ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('ss', $stateName, $stateCode);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
+	} else if ($stateID != 0){
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM state 
+										  WHERE stateName = ? OR stateCode = ? AND stateID <> ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('ssi', $stateName, $stateCode, $stateID);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the driverCode already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
 	}
 	
 	if ($stateID == 0) {
@@ -820,7 +998,7 @@ function getState($mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT stateID, stateName, stateCode FROM state");
@@ -842,7 +1020,7 @@ function getStateByID($stateID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT stateID, stateName, stateCode FROM state WHERE stateID = $stateID ");
@@ -867,7 +1045,7 @@ function delState($stateID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 	$msg = '';
@@ -894,8 +1072,43 @@ function setCity($cityID, $cityName, $cityCode, $cityStateID, $mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
+	}
+	
+	//Validation Begins here
+	if ($cityID == 0) {
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM city 
+										  WHERE cityName = ? or cityCode = ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('ss', $cityName, $cityCode);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
+	} else if ($cityID != 0){
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM city 
+										  WHERE cityName = ? OR cityCode = ? AND cityID <> ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('ssi', $cityName, $cityCode, $cityID);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
 	}
 	
 	if ($cityID == 0) {
@@ -930,7 +1143,7 @@ function getCity($mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT T0.cityID, T0.cityName, T0.cityCode, T0.stateID, T1.stateName FROM city T0 INNER JOIN state T1 ON T0.stateID = T1.stateID");
@@ -952,7 +1165,7 @@ function getCityByID($cityID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT T0.cityID, T0.cityName, T0.cityCode, T0.stateID, T1.stateName FROM city T0 
@@ -978,7 +1191,7 @@ function delCity($cityID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 	$msg = '';
@@ -1005,8 +1218,43 @@ function setLocation($locationID, $locationName, $locationRegionID, $mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
+	}
+	
+	//Validation Begins here
+	if ($locationID == 0) {
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM location 
+										  WHERE locationName = ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('s', $locationName);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
+	} else if ($locationID != 0){
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM location 
+										  WHERE locationName = ? AND locationID <> ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('si', $locationName, $locationID);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
 	}
 	
 	if ($locationID == 0) {
@@ -1041,7 +1289,7 @@ function getLocation($mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT T0.locationID, T0.locationName, T0.regionID, T1.regionName FROM location T0 INNER JOIN region T1 ON T0.regionID = T1.regionID");
@@ -1063,7 +1311,7 @@ function getLocationByID($locationID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT T0.locationID, T0.locationName, T0.regionID, T1.regionName 
@@ -1090,7 +1338,7 @@ function delLocation($locationID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 	$msg = '';
@@ -1117,8 +1365,43 @@ function setPort($portID, $portName, $portLocationID, $mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
+	}
+	
+	//Validation Begins here
+	if ($portID == 0) {
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM port 
+										  WHERE portName = ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('s', $portName);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
+	} else if ($portID != 0){
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM port 
+										  WHERE portName = ? AND portID <> ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('si', $portName, $portID);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
 	}
 	
 	if ($portID == 0) {
@@ -1153,7 +1436,7 @@ function getPort($mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT T0.portID, T0.portName, T0.locationID, T1.locationName FROM port T0 INNER JOIN location T1 ON T0.locationID = T1.locationID");
@@ -1175,7 +1458,7 @@ function getPortByID($portID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT T0.portID, T0.portName, T0.locationID, T1.locationName 
@@ -1202,7 +1485,7 @@ function delPort($portID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 	$msg = '';
@@ -1229,8 +1512,43 @@ function setTerminal($terminalID, $terminalName, $terminalPortID, $mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
+	}
+	
+	//Validation Begins here
+	if ($terminalID == 0) {
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM terminal 
+										  WHERE terminalName = ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('s', $terminalName);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
+	} else if ($terminalID != 0){
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM terminal 
+										  WHERE terminalName = ? AND terminalID <> ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('si', $terminalName, $terminalID);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
 	}
 	
 	if ($terminalID == 0) {
@@ -1265,7 +1583,7 @@ function getTerminal($mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT T0.terminalID, T0.terminalName, T0.portID, T1.portName FROM terminal T0 INNER JOIN port T1 ON T0.portID = T1.portID");
@@ -1287,7 +1605,7 @@ function getTerminalByID($terminalID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT T0.terminalID, T0.terminalName, T0.portID, T1.portName 
@@ -1314,7 +1632,7 @@ function delTerminal($terminalID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 	$msg = '';
@@ -1341,8 +1659,43 @@ function setTruck($truckID, $truckName, $regNumb, $truckTruckTypeID, $mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
+	}
+	
+	//Validation Begins here
+	if ($truckID == 0) {
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM truck 
+										  WHERE regNumb = ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('s', $regNumb);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Truck with this registration number already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
+	} else if ($truckID != 0){
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM truck 
+										  WHERE regNumb = ? AND truckID <> ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('si', $regNumb, $truckID);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Truck with this registration number already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
 	}
 	
 	if ($truckID == 0) {
@@ -1377,7 +1730,7 @@ function getTruck($mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT T0.truckID, T0.truckName, T0.regNumb, T0.truckTypeID, T1.truckTypeName FROM truck T0 INNER JOIN trucktype T1 ON T0.truckTypeID = T1.truckTypeID");
@@ -1399,7 +1752,7 @@ function getTruckByID($truckID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT T0.truckID, T0.truckName, T0.regNumb, T0.truckTypeID, T1.truckTypeName 
@@ -1426,7 +1779,7 @@ function delTruck($truckID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 	$msg = '';
@@ -1452,8 +1805,43 @@ function setUserGroup($userGroupID, $userGroupName, $userGroupDescription, $user
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
+	}
+	
+	//Validation Begins here
+	if ($userGroupID == 0) {
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM usergroups 
+										  WHERE userGroupName = ? OR userGroupCode = ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('ss', $userGroupName, $userGroupCode);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
+	} else if ($userGroupID != 0){
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM usergroups 
+										  WHERE userGroupName = ? OR userGroupCode = ? AND userGroupID <> ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('ssi', $userGroupName, $userGroupCode, $userGroupID);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
 	}
 	
 	if ($userGroupID == 0) {
@@ -1488,7 +1876,7 @@ function getUserGroup($mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT userGroupID, userGroupName, userGroupDescription, userGroupCode, dateCreated, createdByID, dateModified, modifiedByID FROM usergroups");
@@ -1510,7 +1898,7 @@ function getUserGroupByID($userGroupID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT userGroupID, userGroupName, userGroupDescription, userGroupCode, dateCreated, createdByID, dateModified, modifiedByID FROM usergroups WHERE userGroupID = $userGroupID ");
@@ -1535,7 +1923,7 @@ function delUserGroup($userGroupID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 	$msg = '';
@@ -1561,8 +1949,43 @@ function setMenu($menuID, $menuName, $menuDescription, $menuCode, $menuRanking, 
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
+	}
+	
+	//Validation Begins here
+	if ($menuID == 0) {
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM menus 
+										  WHERE menuName = ? OR menuCode = ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('ss', $menuName, $menuCode);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
+	} else if ($menuID != 0){
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM menus 
+										  WHERE menuName = ? OR menuCode = ? AND menuID <> ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('ssi', $menuName, $menuCode, $menuID);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
 	}
 	
 	if ($menuID == 0) {
@@ -1597,7 +2020,7 @@ function getMenu($mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT menuID, menuName, menuDesc, menuCode, menuRanking, dateCreated, createdByID, dateModified, modifiedByID FROM menus");
@@ -1619,7 +2042,7 @@ function getMenuByID($MenuID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT menuID, menuName, menuDesc, menuCode, menuRanking, dateCreated, createdByID, dateModified, modifiedByID FROM menus WHERE menuID = $menuID ");
@@ -1644,7 +2067,7 @@ function delMenu($MenuID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 	$msg = '';
@@ -1670,8 +2093,43 @@ function setMenuItem($menuItemID, $menuMenuID, $menuItemName, $menuItemDescripti
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
+	}
+	
+	//Validation Begins here
+	if ($menuItemID == 0) {
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM menuitems 
+										  WHERE menuItemName = ? OR menuItemCode = ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('ss', $menuItemName, $menuItemCode);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
+	} else if ($menuItemID != 0){
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM menuitems 
+										  WHERE menuItemName = ? OR menuItemCode = ? AND menuItemID <> ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('ssi', $menuItemName, $menuItemCode, $menuItemID);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
 	}
 	
 	if ($menuItemID == 0) {
@@ -1706,7 +2164,7 @@ function getMenuItem($mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT T0.menuItemID, T1.menuName, T0.menuItemName, T0.menuItemDescription, T0.menuItemCode, T0.menuItemRanking, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM menuitems T0 INNER JOIN menus T1 ON T1.menuID = T0.menuID ORDER BY T1.menuName ASC");
@@ -1728,7 +2186,7 @@ function getMenuItemByID($menuItemID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT T0.menuItemID, T1.menuID, T0.menuItemName, T0.menuItemDescription, T0.menuItemCode, T0.menuItemRanking, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM menuitems T0 INNER JOIN menus T1 ON T1.menuID = T0.menuID WHERE T0.menuItemID = $menuItemID ");
@@ -1751,7 +2209,7 @@ function getMenuItemByIDDropDown($menuMenuID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT T0.menuItemID, T1.menuID, T1.menuName, T0.menuItemName, T0.menuItemDescription, T0.menuItemCode, T0.menuItemRanking, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM menuitems T0 INNER JOIN menus T1 ON T1.menuID = T0.menuID WHERE T1.menuID = $menuMenuID ");
@@ -1776,7 +2234,7 @@ function delMenuItem($menuItemID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 	$msg = '';
@@ -1802,8 +2260,43 @@ function setForm($formID, $menuItemMenuID, $formName, $formDescription, $formCod
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
+	}
+	
+	//Validation Begins here
+	if ($formID == 0) {
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM forms 
+										  WHERE formName = ? OR formCode = ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('ss', $formName, $formCode);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
+	} else if ($formID != 0){
+		if ($stmt = $mysqli->prepare("SELECT * 
+										  FROM forms 
+										  WHERE formName = ? OR formCode = ? AND formID <> ? ")) {
+			// Bind to parameter. 
+			$stmt->bind_param('ssi', $formName, $formCode, $formID);
+			$stmt->execute();   // Execute the prepared query.
+			$stmt->store_result();
+
+			if ($stmt->num_rows >= 1) {
+				// If the record already exist throw error
+				$response = array('isSuccess'=>'0', 'msg'=>'Record already exist');
+				echo json_encode($response);
+				exit();			
+			} 
+		} 
 	}
 	
 	if ($formID == 0) {
@@ -1838,7 +2331,7 @@ function getForm($mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT T0.formID, T1.menuItemName, T0.formName, T0.formDescription, T0.formCode, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM forms T0 INNER JOIN menuitems T1 ON T1.menuItemID = T0.menuItemID ORDER BY T1.menuItemName ASC");
@@ -1860,7 +2353,7 @@ function getFormByID($formID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 		$result = $mysqli->query("SELECT T0.formID, T1.menuItemID, T0.formName, T0.formDescription, T0.formCode, T0.dateCreated, T0.createdByID, T0.dateModified, T0.modifiedByID FROM forms T0 INNER JOIN menuitems T1 ON T1.menuItemID = T0.menuItemID WHERE T0.formID = $formID ");
@@ -1885,7 +2378,7 @@ function delForm($formID,$mysqli) {
 	if (!$mysqli){
 
 		$response = array('isSuccess'=>'0', 'msg'=>'Error connecting to database: '.$mysqli->connect_error);
-		return json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 	$msg = '';
